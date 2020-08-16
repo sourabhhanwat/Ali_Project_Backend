@@ -1,0 +1,47 @@
+[
+  {
+    "model": "core.platformmannedstatus",
+    "pk": 1,
+    "fields": {
+      "name": "Manned Non-Evacuated",
+      "ranking": "E",
+      "description": "The manned, non-evacuated category refers to a platform that is continuously occupied by persons accommodated and living thereon, and personnel evacuation prior to the design metocean event is either not intended, or it is impractical."
+    }
+  },
+  {
+    "model": "core.platformmannedstatus",
+    "pk": 2,
+    "fields": {
+      "name": "Not-Normally Manned with Temporary Accommodation",
+      "ranking": "D",
+      "description": "The not-normally manned category refers to a platform that is not normally manned, which is occasionally manned."
+    }
+  },
+  {
+    "model": "core.platformmannedstatus",
+    "pk": 3,
+    "fields": {
+      "name": "Not-Normally Manned without any accommodation, but with a Boat-Landing or bridge linked to another platform.",
+      "ranking": "C",
+      "description": "The not-normally manned category refers to a platform that is not normally manned, which is occasionally manned."
+    }
+  },
+  {
+    "model": "core.platformmannedstatus",
+    "pk": 4,
+    "fields": {
+      "name": "Not in use",
+      "ranking": "B",
+      "description": "Not Applicable"
+    }
+  },
+  {
+    "model": "core.platformmannedstatus",
+    "pk": 5,
+    "fields": {
+      "name": "Unmanned or Manned-Evacuated",
+      "ranking": "A",
+      "description": "The unmanned category refers to a platform that is not normally manned and has no accommodation, no boat landing and no bridge link to another platform."
+    }
+  }
+]

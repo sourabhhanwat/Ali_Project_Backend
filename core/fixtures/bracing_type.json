@@ -1,0 +1,23 @@
+[
+  {
+    "model": "core.bracingtype",
+    "pk": 1,
+    "fields": {
+      "name": "VD"
+    }
+  },
+  {
+    "model": "core.bracingtype",
+    "pk": 2,
+    "fields": {
+      "name": "K"
+    }
+  },
+  {
+    "model": "core.bracingtype",
+    "pk": 3,
+    "fields": {
+      "name": "X"
+    }
+  }
+]

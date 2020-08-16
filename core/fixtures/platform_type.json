@@ -1,0 +1,72 @@
+[
+  {
+    "model": "core.platformtype",
+    "pk": 1,
+    "fields": {
+      "name": "Production"
+    }
+  },
+  {
+    "model": "core.platformtype",
+    "pk": 2,
+    "fields": {
+      "name": "Drilling"
+    }
+  },
+  {
+    "model": "core.platformtype",
+    "pk": 3,
+    "fields": {
+      "name": "Drilling & Production"
+    }
+  },
+  {
+    "model": "core.platformtype",
+    "pk": 4,
+    "fields": {
+      "name": "Wellhead"
+    }
+  },
+  {
+    "model": "core.platformtype",
+    "pk": 5,
+    "fields": {
+      "name": "Quarters"
+    }
+  },
+  {
+    "model": "core.platformtype",
+    "pk": 6,
+    "fields": {
+      "name": "Flare"
+    }
+  },
+  {
+    "model": "core.platformtype",
+    "pk": 7,
+    "fields": {
+      "name": "Injection"
+    }
+  },
+  {
+    "model": "core.platformtype",
+    "pk": 8,
+    "fields": {
+      "name": "Compression"
+    }
+  },
+  {
+    "model": "core.platformtype",
+    "pk": 9,
+    "fields": {
+      "name": "Riser"
+    }
+  },
+  {
+    "model": "core.platformtype",
+    "pk": 10,
+    "fields": {
+      "name": "Utilities"
+    }
+  }
+]

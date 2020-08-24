@@ -116,7 +116,7 @@ class RiskBasedUnderwaterIntervalScoreCalculator(BaseCalculator):
         clof_7 = PlatformLegsAndBracingScoreCalculator(self.instance).calculate()
         clof_11 = LegPileGroutingScoreCalculator(self.instance).calculate()
         clof_14 = ShallowGasScoreCalculator(self.instance).calculate()
-        clof_22 =LastInspectionScoreCalculator(self.instance).calculate()
+        clof_22 = LastInspectionScoreCalculator(self.instance).calculate()
         clof_27 = MechanicalDamageScoreCalculator(self.instance).calculate()
         clof_45 = CorrosionScoreCalculator(self.instance).calculate()
         clof_63 = FloodedMemberScoreCalculator(self.instance).calculate()
@@ -950,5 +950,220 @@ class EnvironmentalConsequenceCategoryCalculator:
         clof_92 = environmental_consequence.fixed_cost_for_spill_cleanup + (
                 environmental_consequence.variable_cost_for_spill_cleanup * clof_91
         )
-
+        print("null ",Decimal(clof_92) / environmental_consequence.oil_price)
         return Decimal(clof_92) / environmental_consequence.oil_price
+
+class CalculatedEconmicImpactConsequenceCalculator:
+    instance: Platform
+
+    def __init__(self, instance: Platform):
+        self.instance = instance
+
+    def _calculate(self):
+        economic_impact_consequence = self.instance.economic_impact_consequence
+        environmental_consequence = self.instance.environmental_consequence
+        corrosion = self.instance.corrosion
+        
+        ilof_74 = economic_impact_consequence.platform_replacement_cost
+        ilof_75 = economic_impact_consequence.platform_replacement_time
+        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss
+
+        ilof_65=0
+        if environmental_consequence.daily_oil_production:
+            ilof_65 = environmental_consequence.daily_oil_production
+        
+        ilof_69=0
+        if environmental_consequence.oil_price:
+            ilof_69 = environmental_consequence.oil_price
+
+        ilof_70=0
+        if economic_impact_consequence.daily_gas_production:
+            ilof_70 = economic_impact_consequence.daily_gas_production
+
+        ilof_71=0 
+        if economic_impact_consequence.gas_price:
+            ilof_71 = economic_impact_consequence.gas_price
+
+        clof_95 = Decimal(((ilof_65 * ilof_69 ) + (ilof_70 * ilof_71)))
+
+        clof_95 = round(clof_95,2)
+        
+        clof_100 = ilof_74 + (clof_95 * ilof_73 * ilof_75)
+        clof_100 = round(clof_100, 3)
+
+        ilof_12 = self.instance.rbui_assessment_date.year
+        ilof_3 = self.instance.platform_installation_date.year
+
+        clof_96 = ilof_12-ilof_3
+
+        ilof_17 = corrosion.platform_design_life
+
+        clof_97 = int(ilof_17 - clof_96)
+        ilof_72 = economic_impact_consequence.discount_date_for_interrupted_production
+        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss
+
+        clof_98 = clof_95 * 365 * (1/(1+ilof_72))
+
+        clof_99 = clof_98 * ilof_73
+        clof_99 = round(clof_99,2)
+
+
+        if clof_99 > clof_100:
+            clof_101 = clof_100/1000000
+        else:
+            clof_101 = clof_100/1000000
+
+        return clof_101
+
+class CalculateEconomicImpactRemainingLifeServicesCalculator:
+    instance: Platform
+
+    def __init__(self, instance: Platform):
+        self.instance = instance
+
+    def _calculate(self):
+        economic_impact_consequence = self.instance.economic_impact_consequence
+        environmental_consequence = self.instance.environmental_consequence
+        corrosion = self.instance.corrosion
+        
+        ilof_74 = economic_impact_consequence.platform_replacement_cost
+        ilof_75 = economic_impact_consequence.platform_replacement_time
+        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss
+
+        ilof_65=0
+        if environmental_consequence.daily_oil_production:
+            ilof_65 = environmental_consequence.daily_oil_production
+        
+        ilof_69=0
+        if environmental_consequence.oil_price:
+            ilof_69 = environmental_consequence.oil_price
+
+        ilof_70=0
+        if economic_impact_consequence.daily_gas_production:
+            ilof_70 = economic_impact_consequence.daily_gas_production
+
+        ilof_71=0 
+        if economic_impact_consequence.gas_price:
+            ilof_71 = economic_impact_consequence.gas_price
+
+        clof_95 = Decimal(((ilof_65 * ilof_69 ) + (ilof_70 * ilof_71)))
+
+        clof_95 = round(clof_95,2)
+        
+        clof_100 = ilof_74 + (clof_95 * ilof_73 * ilof_75)
+        clof_100 = round(clof_100, 3)
+
+        ilof_12 = self.instance.rbui_assessment_date.year
+        ilof_3 = self.instance.platform_installation_date.year
+
+        clof_96 = ilof_12-ilof_3
+
+        ilof_17 = corrosion.platform_design_life
+
+        clof_97 = int(ilof_17 - clof_96)
+        ilof_72 = economic_impact_consequence.discount_date_for_interrupted_production
+        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss
+
+        clof_98 = clof_95 * 365 * (1/(1+ilof_72))
+
+        clof_99 = clof_98 * ilof_73
+        clof_99 = round(clof_99,2)
+
+
+        if clof_99 > clof_100:
+            clof_101 = clof_100/1000000
+        else:
+            clof_101 = clof_100/1000000
+
+        if clof_97 <= 0:
+            clof_102 = 0
+        else:
+            clof_102 = clof_101
+
+        return clof_102
+
+class StructureReplacementDecisionCalculator:
+    instance: Platform
+
+    def __init__(self, instance: Platform):
+        self.instance = instance
+
+    def _calculate(self):
+        economic_impact_consequence = self.instance.economic_impact_consequence
+        environmental_consequence = self.instance.environmental_consequence
+        corrosion = self.instance.corrosion
+        
+        ilof_74 = economic_impact_consequence.platform_replacement_cost
+        ilof_75 = economic_impact_consequence.platform_replacement_time
+        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss
+
+        ilof_65=0
+        if environmental_consequence.daily_oil_production:
+            ilof_65 = environmental_consequence.daily_oil_production
+        
+        ilof_69=0
+        if environmental_consequence.oil_price:
+            ilof_69 = environmental_consequence.oil_price
+
+        ilof_70=0
+        if economic_impact_consequence.daily_gas_production:
+            ilof_70 = economic_impact_consequence.daily_gas_production
+
+        ilof_71=0 
+        if economic_impact_consequence.gas_price:
+            ilof_71 = economic_impact_consequence.gas_price
+
+        clof_95 = Decimal(((ilof_65 * ilof_69 ) + (ilof_70 * ilof_71)))
+
+        clof_95 = round(clof_95,2)
+        
+        clof_100 = ilof_74 + (clof_95 * ilof_73 * ilof_75)
+        clof_100 = round(clof_100, 3)
+
+        ilof_12 = self.instance.rbui_assessment_date.year
+        ilof_3 = self.instance.platform_installation_date.year
+
+        clof_96 = ilof_12-ilof_3
+
+        ilof_17 = corrosion.platform_design_life
+
+        clof_97 = int(ilof_17 - clof_96)
+        ilof_72 = economic_impact_consequence.discount_date_for_interrupted_production
+        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss
+
+        clof_98 = clof_95 * 365 * (1/(1+ilof_72))
+
+        clof_99 = clof_98 * ilof_73
+        clof_99 = round(clof_99,2)
+
+        if clof_99 > clof_100:
+            return True
+        else:
+            return False
+
+class FinalConsequenceCategoryCalculator:
+    instance: Platform
+
+    def __init__(self, instance: Platform):
+        self.instance = instance
+
+    def _calculate(self):
+        clof_90 = self.instance.platform_manned_status.ranking
+        clof_94 = self.instance.environmental_consequence_category
+        clof_104 = self.instance.economic_consequence_category
+        if clof_90 is None and clof_94 is None and clof_104 is None:
+            return
+
+        if clof_90 is None:
+            clof_90 = 'A'
+        if clof_94 is None:
+            clof_94 = 'A'
+        if clof_104 is None:
+            clof_104 = 'A'
+
+        if clof_104 > clof_90 and clof_104 > clof_94:
+            return clof_104
+        elif clof_94 > clof_90:
+            return clof_94
+        else:
+            return clof_90

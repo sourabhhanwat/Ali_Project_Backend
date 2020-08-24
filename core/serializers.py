@@ -29,7 +29,11 @@ from .calculators import (
     ExposureCategorySurveyLevel3Calculator,
     Level1InspectionDateCalculator,
     Level2InspectionDateCalculator,
-    Level3InspectionDateCalculator
+    Level3InspectionDateCalculator,
+    CalculatedEconmicImpactConsequenceCalculator,
+    CalculateEconomicImpactRemainingLifeServicesCalculator,
+    StructureReplacementDecisionCalculator,
+    FinalConsequenceCategoryCalculator,
 )
 from .models import (
     User,
@@ -347,7 +351,13 @@ class PlatformSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
+    calculated_economic_impact_consequence = serializers.SerializerMethodField(read_only=True)
+
+    calculate_economic_impact_remaining_life_services = serializers.SerializerMethodField(read_only=True)
+
     risk_based_underwater_inspection_interval = serializers.SerializerMethodField(read_only=True)
+
+    structure_replacement_decision = serializers.SerializerMethodField(read_only=True)
 
     exposure_category_level = serializers.SerializerMethodField(read_only=True)
 
@@ -362,6 +372,24 @@ class PlatformSerializer(serializers.ModelSerializer):
     level_2_inspection_date = serializers.SerializerMethodField(read_only=True)
 
     level_3_inspection_date = serializers.SerializerMethodField(read_only=True)
+
+    final_consequence_category = serializers.SerializerMethodField(read_only=True)
+
+    @lru_cache(maxsize=1)
+    def get_final_consequence_category(self, obj: Platform):
+        return FinalConsequenceCategoryCalculator(obj)._calculate()
+
+    @lru_cache(maxsize=1)
+    def get_structure_replacement_decision(self, obj: Platform):
+        return StructureReplacementDecisionCalculator(obj)._calculate()
+
+    @lru_cache(maxsize=1)
+    def get_calculate_economic_impact_remaining_life_services(self, obj: Platform):
+        return CalculateEconomicImpactRemainingLifeServicesCalculator(obj)._calculate()
+
+    @lru_cache(maxsize=1)
+    def get_calculated_economic_impact_consequence(self, obj: Platform):
+        return CalculatedEconmicImpactConsequenceCalculator(obj)._calculate()
 
     @lru_cache(maxsize=1)
     def get_exposure_category_level(self, obj: Platform):
@@ -527,6 +555,7 @@ class PlatformSerializer(serializers.ModelSerializer):
 
     @transaction.atomic()
     def update(self, instance: Platform, validated_data: Dict):
+        print("update ",validated_data)
         shallow_gas = validated_data.pop("shallow_gas")
         ShallowGas.objects.filter(platform=instance).update(**shallow_gas)
 

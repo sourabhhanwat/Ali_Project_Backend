@@ -13,6 +13,9 @@ from .models import (
     Platform,
     SiteOwnership,
     PlatformOwnership,
+    PlatformMannedStatus,
+    EconomicImpactConsequence,
+    EnvironmentalConsequence,
 )
 
 logger = logging.getLogger("core.admin")
@@ -49,8 +52,8 @@ class PlatformOwnershipInline(admin.TabularInline):
 
 @admin.register(Platform)
 class PlatformAdmin(admin.ModelAdmin):
-    list_display = ("name", "project_name", "site_name")
-    fieldsets = (("General Details", {"fields": ("name", "site", "description")},),)
+    list_display = ("name", "project_name", "site_name", "environmental_consequence_category", "economic_consequence_category")
+    fieldsets = (("General Details", {"fields": ("name", "site", "description","environmental_consequence_category","economic_consequence_category")},),)
     inlines = (PlatformOwnershipInline,)
 
     def project_name(self, obj):
@@ -69,6 +72,17 @@ class CustomUserAdmin(UserAdmin):
     )
     inlines = (ProjectOwnershipInline, SiteOwnershipInline, PlatformOwnershipInline)
 
+@admin.register(PlatformMannedStatus)
+class PlatformMannedStatusAdmin(admin.ModelAdmin):
+    list_display=('name','ranking','description')
+
+@admin.register(EconomicImpactConsequence)
+class EconomicImpactConsequenceAdmin(admin.ModelAdmin):
+    list_disply='__all__'
+
+@admin.register(EnvironmentalConsequence)
+class EnvironmentalConsequenceAdmin(admin.ModelAdmin):
+    list_diplay="__all__"
 
 admin.site.unregister(Group)
 

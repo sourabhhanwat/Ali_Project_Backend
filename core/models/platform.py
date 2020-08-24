@@ -673,6 +673,11 @@ class Platform(models.Model):
         verbose_name="[ILOF-5] bracing type",
     )
 
+    environmental_consequence_description = models.CharField(max_length=300, null=True, blank=True)
+    economic_consequence_description = models.CharField(max_length=300, null=True, blank=True)
+    environmental_consequence_category = models.CharField(max_length=10, null=True, blank=True)
+    economic_consequence_category = models.CharField(max_length=10, null=True, blank=True)
+
     @property
     def framing_score(self):
         return Decimal(
@@ -687,7 +692,7 @@ class Platform(models.Model):
 
     platform_manned_status = models.ForeignKey(
         PlatformMannedStatus,
-        default=1,
+        default=2,
         on_delete=models.DO_NOTHING,
         verbose_name="[ILOF-63] platform manned status",
     )

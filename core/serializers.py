@@ -34,6 +34,7 @@ from .calculators import (
     CalculateEconomicImpactRemainingLifeServicesCalculator,
     StructureReplacementDecisionCalculator,
     FinalConsequenceCategoryCalculator,
+    RiskRankingCalculator,
 )
 from .models import (
     User,
@@ -374,6 +375,12 @@ class PlatformSerializer(serializers.ModelSerializer):
     level_3_inspection_date = serializers.SerializerMethodField(read_only=True)
 
     final_consequence_category = serializers.SerializerMethodField(read_only=True)
+
+    risk_ranking = serializers.SerializerMethodField(read_only=True)
+
+    @lru_cache(maxsize=1)
+    def get_risk_ranking(self, obj: Platform):
+        return RiskRankingCalculator(obj)._calculate()
 
     @lru_cache(maxsize=1)
     def get_final_consequence_category(self, obj: Platform):

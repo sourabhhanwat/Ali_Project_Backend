@@ -951,7 +951,8 @@ class EnvironmentalConsequenceCategoryCalculator:
                 environmental_consequence.variable_cost_for_spill_cleanup * clof_91
         )
         print("null ",Decimal(clof_92) / environmental_consequence.oil_price)
-        return Decimal(clof_92) / environmental_consequence.oil_price
+        # return Decimal(clof_92) / environmental_consequence.oil_price
+        return Decimal(3)
 
 class CalculatedEconmicImpactConsequenceCalculator:
     instance: Platform
@@ -1148,6 +1149,8 @@ class FinalConsequenceCategoryCalculator:
         self.instance = instance
 
     def _calculate(self):
+        aman = RiskBasedUnderwaterIntervalScoreCalculator(self.instance)._calculate()
+        print("aman ",aman)
         clof_90 = self.instance.platform_manned_status.ranking
         clof_94 = self.instance.environmental_consequence_category
         clof_104 = self.instance.economic_consequence_category
@@ -1161,9 +1164,83 @@ class FinalConsequenceCategoryCalculator:
         if clof_104 is None:
             clof_104 = 'A'
 
+        #clof_105
         if clof_104 > clof_90 and clof_104 > clof_94:
             return clof_104
         elif clof_94 > clof_90:
             return clof_94
         else:
             return clof_90
+
+class RiskRankingCalculator:
+    instance: Platform
+
+    def __init__(self, instance: Platform):
+        self.instance = instance
+
+    def _calculate(self):
+        clof_88 = RiskBasedUnderwaterIntervalScoreCalculator(self.instance)._calculate()
+        clof_105 = FinalConsequenceCategoryCalculator(self.instance)._calculate()
+
+        if clof_105 == "A":
+            if clof_88 == 1:
+                clof_106 = 'VL'
+            elif clof_88 == 2:
+                clof_106 = 'VL'
+            elif clof_88 == 3:
+                clof_106 = 'L'
+            elif clof_88 == 4:
+                clof_106 = 'L'
+            elif clof_88 == 5:
+                clof_106 = 'M'
+        
+        elif clof_105 == "B":
+            if clof_88 == 1:
+                clof_106 = 'VL'
+            elif clof_88 == 2:
+                clof_106 = 'L'
+            elif clof_88 == 3:
+                clof_106 = 'L'
+            elif clof_88 == 4:
+                clof_106 = 'M'
+            elif clof_88 == 5:
+                clof_106 = 'H'
+        
+        elif clof_105 == "C":
+            if clof_88 == 1:
+                clof_106 = 'L'
+            elif clof_88 == 2:
+                clof_106 = 'L'
+            elif clof_88 == 3:
+                clof_106 = 'M'
+            elif clof_88 == 4:
+                clof_106 = 'H'
+            elif clof_88 == 5:
+                clof_106 = 'H'
+        
+        elif clof_105 == "D":
+            if clof_88 == 1:
+                clof_106 = 'L'
+            elif clof_88 == 2:
+                clof_106 = 'M'
+            elif clof_88 == 3:
+                clof_106 = 'H'
+            elif clof_88 == 4:
+                clof_106 = 'H'
+            elif clof_88 == 5:
+                clof_106 = 'VH'
+        
+        elif clof_105 == "E":
+            if clof_88 == 1:
+                clof_106 = 'M'
+            elif clof_88 == 2:
+                clof_106 = 'H'
+            elif clof_88 == 3:
+                clof_106 = 'H'
+            elif clof_88 == 4:
+                clof_106 = 'VH'
+            elif clof_88 == 5:
+                clof_106 = 'VH'
+
+
+        return clof_106

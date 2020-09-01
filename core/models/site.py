@@ -18,7 +18,7 @@ class SiteQuerySet(models.QuerySet):
 class Site(models.Model):
     name = models.CharField(max_length=250)
     description = models.CharField(max_length=500, default="", blank=True)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_site')
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, through="SiteOwnership")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

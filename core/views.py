@@ -1,8 +1,10 @@
 import logging
+from rest_framework.views import APIView
 
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets, mixins, filters, exceptions
 from rest_framework.response import Response
+from django.http import JsonResponse
 
 from .models import (
     User,
@@ -14,6 +16,9 @@ from .models import (
     NumberOfLegsType,
     PlatformMannedStatus,
     MarineGrowth,
+    ProjectOwnership,
+    SiteOwnership,
+    PlatformOwnership
 )
 from .serializers import (
     UserSerializer,
@@ -25,10 +30,44 @@ from .serializers import (
     NumberOfLegsTypeSerializer,
     PlatformMannedStatusSerializer,
     MarineGrowthSerializer,
+    ProjectOwnershipSerializer,
+    SiteOwnershipSerializer,
+    PlatformOwnershipSerializer
 )
 
 logger = logging.getLogger("core.views")
 
+class UserList(APIView):
+    def get(self,request):
+        users = User.objects.all()
+        user_list=[]
+        for user in users:
+            projectownership = ProjectOwnership.objects.filter(user=user)
+            siteownership = SiteOwnership.objects.filter(user=user)
+            platformownership = PlatformOwnership.objects.filter(user=user)
+            user_list.append({"user":UserSerializer(user).data,
+                            "project":ProjectOwnershipSerializer(projectownership,many=True).data,
+                            "site":SiteOwnershipSerializer(siteownership,many=True).data,
+                            "platform":PlatformOwnershipSerializer(platformownership,many=True).data})
+            # _projects=[]
+            # for project_own in projectownership:
+
+            #     _sites=[]
+            #     siteownership = SiteOwnership.objects.filter(user=user)
+            #     for site in siteownership:
+            #         _sites.append({"access_type":site.access_type,
+            #                     "site":site.site.name})
+            #         _platforms=[]
+            #         platformownership = PlatformOwnership.objects.filter(user=user)
+                
+            #     _projects.append({"access_type":project_own.access_type,
+            #                     "project":project_own.project.name,
+            #                     "site":_sites})
+            
+            # user_list.append({"users":UserSerializer(user).data,
+            #                     "project":_projects})
+
+        return Response(user_list)
 
 class UserViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
     serializer_class = UserSerializer
@@ -85,6 +124,7 @@ class PlatformViewSet(
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
         instance: Platform = self.get_object()
+        print("\n************* ",request.data)
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
 

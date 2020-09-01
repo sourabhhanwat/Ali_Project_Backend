@@ -29,7 +29,7 @@ class PlatformOwnership(models.Model):
 
 class ProjectOwnership(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    project = models.ForeignKey("Project", on_delete=models.CASCADE)
+    project = models.ForeignKey("Project", on_delete=models.CASCADE, related_name="project_name")
     assign_time = models.DateTimeField(auto_now=True)
 
     AccessType = [

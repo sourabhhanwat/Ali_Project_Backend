@@ -60,6 +60,9 @@ from .models import (
     ReserveStrengthRatioScore,
     EnvironmentalConsequence,
     EconomicImpactConsequence,
+    ProjectOwnership,
+    SiteOwnership,
+    PlatformOwnership
 )
 
 logger = logging.getLogger("core.serializers")
@@ -80,7 +83,6 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = "__all__"
 
-
 class SiteSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
 
@@ -88,6 +90,17 @@ class SiteSerializer(serializers.ModelSerializer):
         model = Site
         exclude = ("users",)
 
+class ProjectOwnershipSerializer(serializers.ModelSerializer):
+    project = ProjectSerializer()
+    class Meta:
+        model=ProjectOwnership
+        fields=("access_type","project")
+
+class SiteOwnershipSerializer(serializers.ModelSerializer):
+    site = SiteSerializer()
+    class Meta:
+        model=SiteOwnership
+        fields=("access_type","site")
 
 class PlatformTypeSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
@@ -251,7 +264,6 @@ class EconomicImpactConsequenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = EconomicImpactConsequence
         exclude = ("platform",)
-
 
 class PlatformSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
@@ -627,3 +639,14 @@ class PlatformSerializer(serializers.ModelSerializer):
     class Meta:
         model = Platform
         exclude = ("users",)
+
+class PlatformNormalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Platform
+        fields="__all__"
+
+class PlatformOwnershipSerializer(serializers.ModelSerializer):
+    platform = PlatformNormalSerializer()
+    class Meta:
+        model=PlatformOwnership
+        fields=("access_type","platform")

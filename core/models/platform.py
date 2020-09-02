@@ -677,6 +677,9 @@ class Platform(models.Model):
     economic_consequence_description = models.CharField(max_length=300, null=True, blank=True)
     environmental_consequence_category = models.CharField(max_length=10, null=True, blank=True)
     economic_consequence_category = models.CharField(max_length=10, null=True, blank=True)
+    level_1_last_inspection_date = models.DateField(null=True,blank=True)
+    level_2_last_inspection_date = models.DateField(null=True,blank=True)
+    level_3_last_inspection_date = models.DateField(null=True,blank=True)
 
     @property
     def framing_score(self):
@@ -697,9 +700,17 @@ class Platform(models.Model):
         verbose_name="[ILOF-63] platform manned status",
     )
 
-    selected_inspection_interval_for_next_inspection = models.IntegerField(
+    level_1_selected_inspection_interval_for_next_inspection = models.IntegerField(
         default=0,
-        verbose_name="[ILOF-76] selected inspection interval for next inspection",
+        verbose_name="[ILOF-76] level 1 selected inspection interval for next inspection",
+    )
+    level_2_selected_inspection_interval_for_next_inspection = models.IntegerField(
+        default=0,
+        verbose_name="[ILOF-76] level 2 selected inspection interval for next inspection",
+    )
+    level_3_selected_inspection_interval_for_next_inspection = models.IntegerField(
+        default=0,
+        verbose_name="[ILOF-76] level 3 selected inspection interval for next inspection",
     )
 
     @property

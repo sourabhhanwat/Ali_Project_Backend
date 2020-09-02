@@ -35,6 +35,10 @@ from .calculators import (
     StructureReplacementDecisionCalculator,
     FinalConsequenceCategoryCalculator,
     RiskRankingCalculator,
+    Level1NextInspectionDateCalculator,
+    Level2NextInspectionDateCalculator,
+    Level3NextInspectionDateCalculator,
+    Next10YearsInspectionPlanCalculator
 )
 from .models import (
     User,
@@ -389,6 +393,30 @@ class PlatformSerializer(serializers.ModelSerializer):
     final_consequence_category = serializers.SerializerMethodField(read_only=True)
 
     risk_ranking = serializers.SerializerMethodField(read_only=True)
+    
+    level_1_next_inspection_date = serializers.SerializerMethodField(read_only=True)
+
+    level_2_next_inspection_date = serializers.SerializerMethodField(read_only=True)
+
+    level_3_next_inspection_date = serializers.SerializerMethodField(read_only=True)
+
+    next_10_years_inspection_plan = serializers.SerializerMethodField(read_only=True)
+
+    @lru_cache(maxsize=1)
+    def get_next_10_years_inspection_plan(self, obj: Platform):
+        return Next10YearsInspectionPlanCalculator(obj)._calculate()
+
+    @lru_cache(maxsize=1)
+    def get_level_1_next_inspection_date(self, obj: Platform):
+        return Level1NextInspectionDateCalculator(obj)._calculate()
+
+    @lru_cache(maxsize=1)
+    def get_level_2_next_inspection_date(self, obj: Platform):
+        return Level2NextInspectionDateCalculator(obj)._calculate()
+
+    @lru_cache(maxsize=1)
+    def get_level_3_next_inspection_date(self, obj: Platform):
+        return Level3NextInspectionDateCalculator(obj)._calculate()
 
     @lru_cache(maxsize=1)
     def get_risk_ranking(self, obj: Platform):

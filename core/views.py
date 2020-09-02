@@ -69,6 +69,7 @@ class UserList(APIView):
 
         return Response(user_list)
 
+
 class UserViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
     serializer_class = UserSerializer
     queryset = User.objects.all()

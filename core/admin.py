@@ -53,7 +53,7 @@ class PlatformOwnershipInline(admin.TabularInline):
 @admin.register(Platform)
 class PlatformAdmin(admin.ModelAdmin):
     list_display = ("name", "project_name", "site_name", "environmental_consequence_category", "economic_consequence_category")
-    fieldsets = (("General Details", {"fields": ("name", "site", "description","environmental_consequence_category","economic_consequence_category")},),)
+    fieldsets = (("General Details", {"fields": ("name", "site", "description","environmental_consequence_category","economic_consequence_category","level_1_last_inspection_date","level_2_last_inspection_date","level_3_last_inspection_date","level_1_selected_inspection_interval_for_next_inspection","level_2_selected_inspection_interval_for_next_inspection","level_3_selected_inspection_interval_for_next_inspection")},),)
     inlines = (PlatformOwnershipInline,)
 
     def project_name(self, obj):

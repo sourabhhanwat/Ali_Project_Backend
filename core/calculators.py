@@ -102,6 +102,130 @@ class Level3InspectionDateCalculator:
     def _calculate(self):
         date = datetime.now() + relativedelta(years=3)
         return date
+    
+class Level1NextInspectionDateCalculator:
+    instance: Platform
+
+    def __init__(self, instance: Platform):
+        self.instance = instance
+
+    def _calculate(self):
+        try:
+            last_inspection_date = self.instance.level_1_last_inspection_date
+            interval = self.instance.level_1_selected_inspection_interval_for_next_inspection
+
+            next_inspection_date = last_inspection_date + relativedelta(years=interval)
+
+            return next_inspection_date
+        except:
+            return None
+
+class Level2NextInspectionDateCalculator:
+    instance: Platform
+
+    def __init__(self, instance: Platform):
+        self.instance = instance
+
+    def _calculate(self):
+        try:
+            last_inspection_date = self.instance.level_2_last_inspection_date
+            interval = self.instance.level_2_selected_inspection_interval_for_next_inspection
+
+            next_inspection_date = last_inspection_date + relativedelta(years=interval)
+
+            return next_inspection_date
+        except:
+            return None
+
+class Level3NextInspectionDateCalculator:
+    instance: Platform
+
+    def __init__(self, instance: Platform):
+        self.instance = instance
+
+    def _calculate(self):
+        try:
+            last_inspection_date = self.instance.level_3_last_inspection_date
+            interval = self.instance.level_3_selected_inspection_interval_for_next_inspection
+
+            next_inspection_date = last_inspection_date + relativedelta(years=interval)
+
+            return next_inspection_date
+        except:
+            return None
+
+class Next10YearsInspectionPlanCalculator:
+    instance: Platform
+
+    def __init__(self, instance: Platform):
+        self.instance = instance
+
+    def _calculate(self):
+        try:
+            level_1_inspection_date = self.instance.level_1_last_inspection_date
+            level_2_inspection_date = self.instance.level_2_last_inspection_date
+            level_3_inspection_date = self.instance.level_3_last_inspection_date
+            level_1_interval = self.instance.level_1_selected_inspection_interval_for_next_inspection
+            level_2_interval = self.instance.level_2_selected_inspection_interval_for_next_inspection
+            level_3_interval = self.instance.level_3_selected_inspection_interval_for_next_inspection
+
+            if level_1_inspection_date is not None:
+                level_1_inspection_date = level_1_inspection_date + relativedelta(years=level_1_interval)
+            if level_2_inspection_date is not None:
+                level_2_inspection_date = level_2_inspection_date + relativedelta(years=level_2_interval)
+            if level_3_inspection_date is not None:
+                level_3_inspection_date = level_3_inspection_date + relativedelta(years=level_3_interval)
+            
+            next_inspection=[]
+            level_1_count = 0
+            level_2_count = 0
+            level_3_count = 0
+            for i in range(0,10):
+                next_date = datetime.now().year + i
+
+                date_1 = datetime.now().year + 1
+                date_10 = datetime.now().year + 9
+
+                if next_date == level_1_inspection_date.year and next_date == level_2_inspection_date.year and next_date == level_3_inspection_date.year:
+                    next_inspection.append({"year":next_date,
+                                            "level":"Level 1, Level 2, Level 3"})
+                
+                elif next_date == level_1_inspection_date.year and next_date == level_2_inspection_date.year:
+                    next_inspection.append({"year":next_date,
+                                            "level":"Level 1, Level 2"})
+
+                elif next_date == level_1_inspection_date.year and next_date == level_3_inspection_date.year:
+                    next_inspection.append({"year":next_date,
+                                            "level":"Level 1, Level 3"})
+
+                elif next_date == level_2_inspection_date.year and next_date == level_3_inspection_date.year:
+                    next_inspection.append({"year":next_date,
+                                            "level":"Level 2, Level 3"})
+                
+                elif next_date == level_1_inspection_date.year:
+                    next_inspection.append({"year":next_date,
+                                            "level":"Level 1"})
+
+                elif next_date == level_2_inspection_date.year:
+                    next_inspection.append({"year":next_date,
+                                            "level":"Level 2"})
+
+                elif next_date == level_3_inspection_date.year:
+                    next_inspection.append({"year":next_date,
+                                            "level":"Level 3"})
+
+                if level_1_inspection_date.year==next_date:
+                    level_1_inspection_date = level_1_inspection_date + relativedelta(years=level_1_interval)
+
+                if level_2_inspection_date.year==next_date:
+                    level_2_inspection_date = level_2_inspection_date + relativedelta(years=level_2_interval)            
+
+                if level_3_inspection_date.year==next_date:
+                    level_3_inspection_date = level_3_inspection_date + relativedelta(years=level_3_interval)
+
+            return next_inspection
+        except:
+            return None
 
 class RiskBasedUnderwaterIntervalScoreCalculator(BaseCalculator):
     vh=Decimal(3)

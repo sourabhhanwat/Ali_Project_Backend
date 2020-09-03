@@ -42,13 +42,15 @@ class UserList(APIView):
         users = User.objects.all()
         user_list=[]
         for user in users:
-            projectownership = ProjectOwnership.objects.filter(user=user)
-            siteownership = SiteOwnership.objects.filter(user=user)
-            platformownership = PlatformOwnership.objects.filter(user=user)
+            projectownership = ProjectOwnership.objects.filter(user=user).first()
+            projects = Project.objects.filter(id = projectownership.project_id).first()
+            # siteownership = SiteOwnership.objects.filter(user=user)
+            # platformownership = PlatformOwnership.objects.filter(user=user)
+        
             user_list.append({"user":UserSerializer(user).data,
-                            "project":ProjectOwnershipSerializer(projectownership,many=True).data,
-                            "site":SiteOwnershipSerializer(siteownership,many=True).data,
-                            "platform":PlatformOwnershipSerializer(platformownership,many=True).data})
+                            "project":ProjectSerializer(projects).data})
+                            # "site":SiteOwnershipSerializer(siteownership,many=True).data,
+                            # "platform":PlatformOwnershipSerializer(platformownership,many=True).data})
             # _projects=[]
             # for project_own in projectownership:
 

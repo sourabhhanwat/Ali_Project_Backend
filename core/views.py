@@ -41,16 +41,18 @@ class UserList(APIView):
     def get(self,request):
         users = User.objects.all()
         user_list=[]
+        _users=[]
         for user in users:
             projectownership = ProjectOwnership.objects.filter(user=user).first()
-            projects = Project.objects.filter(id = projectownership.project_id).first()
             # siteownership = SiteOwnership.objects.filter(user=user)
             # platformownership = PlatformOwnership.objects.filter(user=user)
         
-            user_list.append({"user":UserSerializer(user).data,
-                            "project":ProjectSerializer(projects).data})
+            # user_list.append({"user":UserSerializer(user).data})
                             # "site":SiteOwnershipSerializer(siteownership,many=True).data,
                             # "platform":PlatformOwnershipSerializer(platformownership,many=True).data})
+            user_list.append({"id":user.id,"username":user.username})
+
+        _users.append({"user":user_list})
             # _projects=[]
             # for project_own in projectownership:
 
@@ -69,7 +71,7 @@ class UserList(APIView):
             # user_list.append({"users":UserSerializer(user).data,
             #                     "project":_projects})
 
-        return Response(user_list)
+        return Response(_users)
 
 
 class UserViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):

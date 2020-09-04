@@ -469,7 +469,7 @@ class EnvironmentalConsequence(models.Model):
 
     estimated_fraction_of_oil_production_loss_due_to_leakage = models.DecimalField(
         null=True,
-        default=None,
+        default=0,
         max_digits=10,
         decimal_places=5,
         verbose_name="[ILOF-66] estimated fraction of oil production loss due to leakage (%)",
@@ -479,7 +479,7 @@ class EnvironmentalConsequence(models.Model):
         null=True,
         max_digits=10,
         decimal_places=5,
-        default=None,
+        default=0,
         verbose_name="[ILOF-67] fixed cost for spill clean-up ($)",
     )
 
@@ -487,7 +487,7 @@ class EnvironmentalConsequence(models.Model):
         null=True,
         max_digits=10,
         decimal_places=5,
-        default=None,
+        default=0,
         verbose_name="[ILOF-68] variable cost for spill clean-up ($/bbl)",
     )
 
@@ -495,7 +495,7 @@ class EnvironmentalConsequence(models.Model):
         null=True,
         max_digits=10,
         decimal_places=5,
-        default=None,
+        default=0,
         verbose_name="[ILOF-69] oil price ($/bbl)",
     )
 

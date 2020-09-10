@@ -1329,6 +1329,7 @@ class ExposureCategorySurveyLevel3Calculator:
 
     def _calculate(self):
         clof_108 = ExposureCategoryLevelCalculator(self.instance)._calculate()
+        clof_109=None
         if clof_108 == 'L-1':
             clof_109 = '6-10'
         elif clof_108 == 'L-2':

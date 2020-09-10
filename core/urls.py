@@ -11,7 +11,8 @@ from .views import (
     NumberOfLegsTypeViewSet,
     PlatformMannedStatusViewSet,
     MarineGrowthViewSet,
-    UserList
+    UserList,
+    CategoryList
 )
 
 router = DefaultRouter()
@@ -28,6 +29,7 @@ urlpatterns = [
     # fmt: off
     path("users/me/", UserViewSet.as_view({"get": "retrieve"}), name="user-detail"),
     path("users/", UserList.as_view(), name="user-list"),
+    path("category/", CategoryList.as_view(), name="category-list"),
     path("", include(router.urls))
     # fmt: on
 ]

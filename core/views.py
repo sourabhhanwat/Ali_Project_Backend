@@ -42,6 +42,11 @@ class UserList(APIView):
         users = User.objects.all()
         return Response(UserSerializer(users, many=True).data)
 
+class CategoryList(APIView):
+    def get(self,request):
+        categories = ['A','B','C','D','E']
+        return Response(categories)
+
 
 class UserViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
     serializer_class = UserSerializer

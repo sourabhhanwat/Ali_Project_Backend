@@ -9,6 +9,7 @@ from django.db import models, transaction
 from django.db.models import Q, Subquery, OuterRef, CheckConstraint
 from django.db.models.functions import Coalesce
 from django.utils import timezone
+from .project import Project
 
 from . import NumberOfLegsType, BracingType, PlatformMannedStatus, PlatformType
 from .ownership import PlatformOwnership, SiteOwnership, ProjectOwnership
@@ -580,7 +581,7 @@ class PlatformQuerySet(models.QuerySet):
 
 
 class Platform(models.Model):
-    site = models.ForeignKey("Site", on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_platform')
 
     users = models.ManyToManyField(
         settings.AUTH_USER_MODEL, through="PlatformOwnership"
@@ -703,14 +704,17 @@ class Platform(models.Model):
     level_1_selected_inspection_interval_for_next_inspection = models.IntegerField(
         default=0,
         verbose_name="[ILOF-76] level 1 selected inspection interval for next inspection",
+        null=True,blank=True
     )
     level_2_selected_inspection_interval_for_next_inspection = models.IntegerField(
         default=0,
         verbose_name="[ILOF-76] level 2 selected inspection interval for next inspection",
+        null=True,blank=True
     )
     level_3_selected_inspection_interval_for_next_inspection = models.IntegerField(
         default=0,
         verbose_name="[ILOF-76] level 3 selected inspection interval for next inspection",
+        null=True,blank=True
     )
 
     @property

@@ -40,38 +40,7 @@ logger = logging.getLogger("core.views")
 class UserList(APIView):
     def get(self,request):
         users = User.objects.all()
-        user_list=[]
-        _users=[]
-        for user in users:
-            projectownership = ProjectOwnership.objects.filter(user=user).first()
-            # siteownership = SiteOwnership.objects.filter(user=user)
-            # platformownership = PlatformOwnership.objects.filter(user=user)
-        
-            # user_list.append({"user":UserSerializer(user).data})
-                            # "site":SiteOwnershipSerializer(siteownership,many=True).data,
-                            # "platform":PlatformOwnershipSerializer(platformownership,many=True).data})
-            user_list.append({"id":user.id,"username":user.username})
-
-        _users.append({"user":user_list})
-            # _projects=[]
-            # for project_own in projectownership:
-
-            #     _sites=[]
-            #     siteownership = SiteOwnership.objects.filter(user=user)
-            #     for site in siteownership:
-            #         _sites.append({"access_type":site.access_type,
-            #                     "site":site.site.name})
-            #         _platforms=[]
-            #         platformownership = PlatformOwnership.objects.filter(user=user)
-                
-            #     _projects.append({"access_type":project_own.access_type,
-            #                     "project":project_own.project.name,
-            #                     "site":_sites})
-            
-            # user_list.append({"users":UserSerializer(user).data,
-            #                     "project":_projects})
-
-        return Response(_users)
+        return Response(UserSerializer(users, many=True).data)
 
 
 class UserViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
@@ -112,8 +81,7 @@ class SiteViewSet(viewsets.ReadOnlyModelViewSet):
 class PlatformFilter(FilterSet):
     class Meta:
         model = Platform
-        fields = ["site", "site__project"]
-
+        fields = ["name", "project__name"]
 
 class PlatformViewSet(
     viewsets.GenericViewSet,
@@ -129,7 +97,7 @@ class PlatformViewSet(
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
         instance: Platform = self.get_object()
-        print("\n************* ",request.data)
+        print("\n*********** ",request.data)
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
 

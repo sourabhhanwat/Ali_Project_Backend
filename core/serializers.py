@@ -27,9 +27,6 @@ from .calculators import (
     ExposureCategorySurveyLevel1Calculator,
     ExposureCategorySurveyLevel2Calculator,
     ExposureCategorySurveyLevel3Calculator,
-    Level1InspectionDateCalculator,
-    Level2InspectionDateCalculator,
-    Level3InspectionDateCalculator,
     CalculatedEconmicImpactConsequenceCalculator,
     CalculateEconomicImpactRemainingLifeServicesCalculator,
     StructureReplacementDecisionCalculator,
@@ -384,12 +381,6 @@ class PlatformSerializer(serializers.ModelSerializer):
 
     exposure_category_level_3 = serializers.SerializerMethodField(read_only=True)
 
-    level_1_inspection_date = serializers.SerializerMethodField(read_only=True)
-
-    level_2_inspection_date = serializers.SerializerMethodField(read_only=True)
-
-    level_3_inspection_date = serializers.SerializerMethodField(read_only=True)
-
     final_consequence_category = serializers.SerializerMethodField(read_only=True)
 
     risk_ranking = serializers.SerializerMethodField(read_only=True)
@@ -440,31 +431,19 @@ class PlatformSerializer(serializers.ModelSerializer):
 
     @lru_cache(maxsize=1)
     def get_exposure_category_level(self, obj: Platform):
-        return ExposureCategoryLevelCalculator()._calculate()
+        return ExposureCategoryLevelCalculator(obj)._calculate()
 
     @lru_cache(maxsize=1)
     def get_exposure_category_level_1(self, obj: Platform):
-        return ExposureCategorySurveyLevel1Calculator()._calculate()
+        return ExposureCategorySurveyLevel1Calculator(obj)._calculate()
 
     @lru_cache(maxsize=1)
     def get_exposure_category_level_2(self, obj: Platform):
-        return ExposureCategorySurveyLevel2Calculator()._calculate()
+        return ExposureCategorySurveyLevel2Calculator(obj)._calculate()
 
     @lru_cache(maxsize=1)
     def get_exposure_category_level_3(self, obj: Platform):
-        return ExposureCategorySurveyLevel3Calculator()._calculate()
-
-    @lru_cache(maxsize=1)
-    def get_level_1_inspection_date(self, obj: Platform):
-        return Level1InspectionDateCalculator()._calculate()
-
-    @lru_cache(maxsize=1)
-    def get_level_2_inspection_date(self, obj: Platform):
-        return Level2InspectionDateCalculator()._calculate()
-
-    @lru_cache(maxsize=1)
-    def get_level_3_inspection_date(self, obj: Platform):
-        return Level3InspectionDateCalculator()._calculate()
+        return ExposureCategorySurveyLevel3Calculator(obj)._calculate()
 
     @lru_cache(maxsize=1)
     def get_risk_based_underwater_inspection_interval(self, obj: Platform):
@@ -602,7 +581,7 @@ class PlatformSerializer(serializers.ModelSerializer):
 
     @transaction.atomic()
     def update(self, instance: Platform, validated_data: Dict):
-        print("update ",validated_data)
+        # print("update ",validated_data)
         shallow_gas = validated_data.pop("shallow_gas")
         ShallowGas.objects.filter(platform=instance).update(**shallow_gas)
 

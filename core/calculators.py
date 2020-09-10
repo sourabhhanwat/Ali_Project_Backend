@@ -67,41 +67,6 @@ class PlatformVintageScoreCalculator(BaseCalculator):
         clof_4 = clof_2 * clof_3
 
         return clof_4
-
-class ExposureCategoryLevelCalculator:
-    def _calculate(self):
-        level = 'L-1'
-        return level
-
-class ExposureCategorySurveyLevel1Calculator:
-    def _calculate(self):
-        level_1 = '1'
-        return level_1
-
-class ExposureCategorySurveyLevel2Calculator:
-    def _calculate(self):
-        level_2 = '3-5'
-        return level_2
-
-class ExposureCategorySurveyLevel3Calculator:
-    def _calculate(self):
-        level_3 = '6-10'
-        return level_3
-
-class Level1InspectionDateCalculator:
-    def _calculate(self):
-        date = datetime.now() + relativedelta(years=1)
-        return date
-
-class Level2InspectionDateCalculator:
-    def _calculate(self):
-        date = datetime.now() + relativedelta(years=2)
-        return date
-
-class Level3InspectionDateCalculator:
-    def _calculate(self):
-        date = datetime.now() + relativedelta(years=3)
-        return date
     
 class Level1NextInspectionDateCalculator:
     instance: Platform
@@ -180,52 +145,56 @@ class Next10YearsInspectionPlanCalculator:
         level_1_count = 0
         level_2_count = 0
         level_3_count = 0
-        for i in range(0,10):
-            print("level 1 ",level_1_inspection_date)
-            print("level 2 ",level_2_inspection_date)
-            print("level 3 ",level_3_inspection_date)
-            next_date = datetime.now().year + i
-            print("next date ",next_date)
+        try:
+            for i in range(0,10):
 
-            date_1 = datetime.now().year + 1
-            date_10 = datetime.now().year + 9
+                next_date = datetime.now().year + i
 
-            if next_date == level_1_inspection_date.year and next_date == level_2_inspection_date.year and next_date == level_3_inspection_date.year:
+                date_1 = datetime.now().year + 1
+                date_10 = datetime.now().year + 9
+                print("next ",next_date)
+                if next_date == level_1_inspection_date.year and next_date == level_2_inspection_date.year and next_date == level_3_inspection_date.year:
+                    next_inspection.append({"year":next_date,
+                                            "level":"Level 1, Level 2, Level 3"})
+                
+                elif next_date == level_1_inspection_date.year and next_date == level_2_inspection_date.year:
+                    next_inspection.append({"year":next_date,
+                                            "level":"Level 1, Level 2"})
+
+                elif next_date == level_1_inspection_date.year and next_date == level_3_inspection_date.year:
+                    next_inspection.append({"year":next_date,
+                                            "level":"Level 1, Level 3"})
+
+                elif next_date == level_2_inspection_date.year and next_date == level_3_inspection_date.year:
+                    next_inspection.append({"year":next_date,
+                                            "level":"Level 2, Level 3"})
+                
+                elif next_date == level_1_inspection_date.year:
+                    next_inspection.append({"year":next_date,
+                                            "level":"Level 1"})
+
+                elif next_date == level_2_inspection_date.year:
+                    next_inspection.append({"year":next_date,
+                                            "level":"Level 2"})
+
+                elif next_date == level_3_inspection_date.year:
+                    next_inspection.append({"year":next_date,
+                                            "level":"Level 3"})
+
+                if level_1_inspection_date.year==next_date:
+                    level_1_inspection_date = level_1_inspection_date + relativedelta(years=level_1_interval)
+
+                if level_2_inspection_date.year==next_date:
+                    level_2_inspection_date = level_2_inspection_date + relativedelta(years=level_2_interval)            
+
+                if level_3_inspection_date.year==next_date:
+                    level_3_inspection_date = level_3_inspection_date + relativedelta(years=level_3_interval)
+        except:
+            next_inspection=[]
+            for i in range(0,10):
+                next_date = datetime.now().year + i
                 next_inspection.append({"year":next_date,
-                                        "level":"Level 1, Level 2, Level 3"})
-            
-            elif next_date == level_1_inspection_date.year and next_date == level_2_inspection_date.year:
-                next_inspection.append({"year":next_date,
-                                        "level":"Level 1, Level 2"})
-
-            elif next_date == level_1_inspection_date.year and next_date == level_3_inspection_date.year:
-                next_inspection.append({"year":next_date,
-                                        "level":"Level 1, Level 3"})
-
-            elif next_date == level_2_inspection_date.year and next_date == level_3_inspection_date.year:
-                next_inspection.append({"year":next_date,
-                                        "level":"Level 2, Level 3"})
-            
-            elif next_date == level_1_inspection_date.year:
-                next_inspection.append({"year":next_date,
-                                        "level":"Level 1"})
-
-            elif next_date == level_2_inspection_date.year:
-                next_inspection.append({"year":next_date,
-                                        "level":"Level 2"})
-
-            elif next_date == level_3_inspection_date.year:
-                next_inspection.append({"year":next_date,
-                                        "level":"Level 3"})
-
-            if level_1_inspection_date.year==next_date:
-                level_1_inspection_date = level_1_inspection_date + relativedelta(years=level_1_interval)
-
-            if level_2_inspection_date.year==next_date:
-                level_2_inspection_date = level_2_inspection_date + relativedelta(years=level_2_interval)            
-
-            if level_3_inspection_date.year==next_date:
-                level_3_inspection_date = level_3_inspection_date + relativedelta(years=level_3_interval)
+                                        "level":""})
 
         return next_inspection
         # except:
@@ -297,7 +266,6 @@ class RiskBasedUnderwaterIntervalScoreCalculator(BaseCalculator):
                 elif clof_86 < Decimal(120):
                     clof_88 = Decimal(1)
 
-        print("clof_88 ",clof_88)
         return clof_88
 
 
@@ -631,13 +599,12 @@ class MarineGrowthScoreCalculator(BaseCalculator):
                         > marine_growth.marine_growth_design_thickness
                 ):
                     if (
-                            marine_growth.marine_growth_inspected_thickness * Decimal("1.5")
-                            > marine_growth.marine_growth_design_thickness
+                            marine_growth.marine_growth_inspected_thickness
+                            > marine_growth.marine_growth_design_thickness * Decimal("1.5")
                     ):
                         if (
                                 marine_growth.marine_growth_inspected_thickness
-                                * Decimal("1.5")
-                                > marine_growth.marine_growth_design_thickness
+                                > marine_growth.marine_growth_design_thickness * Decimal("2")
                         ):
                             clof_47.append(self.mg_h)
                         else:
@@ -1078,9 +1045,8 @@ class EnvironmentalConsequenceCategoryCalculator:
         clof_92 = environmental_consequence.fixed_cost_for_spill_cleanup + (
                 environmental_consequence.variable_cost_for_spill_cleanup * clof_91
         )
-        print("null ",Decimal(clof_92) / environmental_consequence.oil_price)
-        # return Decimal(clof_92) / environmental_consequence.oil_price
-        return Decimal(3)
+        return Decimal(clof_92) / environmental_consequence.oil_price
+        # return Decimal(3)
 
 class CalculatedEconmicImpactConsequenceCalculator:
     instance: Platform
@@ -1208,7 +1174,7 @@ class CalculateEconomicImpactRemainingLifeServicesCalculator:
             clof_102 = 0
         else:
             clof_102 = clof_101
-
+        
         return clof_102
 
 class StructureReplacementDecisionCalculator:
@@ -1277,8 +1243,6 @@ class FinalConsequenceCategoryCalculator:
         self.instance = instance
 
     def _calculate(self):
-        aman = RiskBasedUnderwaterIntervalScoreCalculator(self.instance)._calculate()
-        print("aman ",aman)
         clof_90 = self.instance.platform_manned_status.ranking
         clof_94 = self.instance.environmental_consequence_category
         clof_104 = self.instance.economic_consequence_category
@@ -1299,6 +1263,78 @@ class FinalConsequenceCategoryCalculator:
             return clof_94
         else:
             return clof_90
+
+class ExposureCategoryLevelCalculator:
+    instance: Platform
+
+    def __init__(self, instance: Platform):
+        self.instance = instance
+
+    def _calculate(self):
+        clof_105 = FinalConsequenceCategoryCalculator(self.instance)._calculate()
+        clof_90 = self.instance.platform_manned_status.ranking
+        print("clof 90 ",clof_90)
+        print("clof 105 ",clof_105)
+        clof_108=None
+        if clof_90 == 'E' or clof_90 == 'D':
+            clof_108 = 'L-1'
+        elif clof_90 == 'C':
+            if clof_105 == 'E' or clof_105 == 'D':
+                clof_108 = 'L-1'
+            else:
+                clof_108 = 'L-2'
+        elif clof_90 == 'A' or clof_90 == 'B':
+            if clof_105 == 'E' or clof_105 == 'D':
+                clof_108 == 'L-1'
+            elif clof_105 == 'C':
+                clof_108 = 'L-2'
+            elif clof_105 == 'B' or clof_105 == 'A':
+                clof_108 = 'L-3'
+    
+        return clof_108
+
+class ExposureCategorySurveyLevel1Calculator:
+    instance: Platform
+
+    def __init__(self, instance: Platform):
+        self.instance = instance
+
+    def _calculate(self):
+        clof_108 = ExposureCategoryLevelCalculator(self.instance)._calculate()
+        clof_109 = '1'
+        return clof_109
+
+class ExposureCategorySurveyLevel2Calculator:
+    instance: Platform
+
+    def __init__(self, instance: Platform):
+        self.instance = instance
+
+    def _calculate(self):
+        clof_108 = ExposureCategoryLevelCalculator(self.instance)._calculate()
+        if clof_108 == 'L-1':
+            clof_109 = '3-5'
+        elif clof_108 == 'L-2':
+            clof_109 = '5-10'
+        elif clof_108 == 'L-3':
+            clof_109 = '5-10'
+        return clof_109
+
+class ExposureCategorySurveyLevel3Calculator:
+    instance: Platform
+
+    def __init__(self, instance: Platform):
+        self.instance = instance
+
+    def _calculate(self):
+        clof_108 = ExposureCategoryLevelCalculator(self.instance)._calculate()
+        if clof_108 == 'L-1':
+            clof_109 = '6-10'
+        elif clof_108 == 'L-2':
+            clof_109 = '11-15'
+        elif clof_108 == 'L-3':
+            clof_109 = '11-15'
+        return clof_109
 
 class RiskRankingCalculator:
     instance: Platform

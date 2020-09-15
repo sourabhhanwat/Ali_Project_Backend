@@ -29,6 +29,9 @@ class BaseCalculator:
 
         value = self._calculate()
 
+        if type(value) is list:
+            return value
+
         if value > self.score_max:
             return self.score_max
 
@@ -200,73 +203,73 @@ class Next10YearsInspectionPlanCalculator:
         # except:
         #     return None
 
-class RiskBasedUnderwaterIntervalScoreCalculator(BaseCalculator):
-    vh=Decimal(3)
-    h=Decimal(5)
-    m=Decimal(7)
-    l=Decimal(10)
-    vl=Decimal(12)
-    score_max = Decimal(80)
-    score_min = Decimal(3)
-    def _calculate(self):
-        clof_4 = PlatformVintageScoreCalculator(self.instance).calculate()
-        clof_7 = PlatformLegsAndBracingScoreCalculator(self.instance).calculate()
-        clof_11 = LegPileGroutingScoreCalculator(self.instance).calculate()
-        clof_14 = ShallowGasScoreCalculator(self.instance).calculate()
-        clof_22 = LastInspectionScoreCalculator(self.instance).calculate()
-        clof_27 = MechanicalDamageScoreCalculator(self.instance).calculate()
-        clof_45 = CorrosionScoreCalculator(self.instance).calculate()
-        clof_63 = FloodedMemberScoreCalculator(self.instance).calculate()
-        clof_49 = MarineGrowthScoreCalculator(self.instance).calculate()
-        clof_52 = ScourCalculator(self.instance).calculate()
-        clof_67 = UnprotectedAppurtenancesScoreCalculator(self.instance).calculate()
-        clof_70 = DeckLoadScoreCalculator(self.instance).calculate()
-        clof_77 = DeckElevationWaveInDeckScoreCalculator(self.instance).calculate()
-        clof_81 = AdditionalAppurtenanceScoreCalculator(self.instance).calculate()
-        clof_84 = FatigueLoadScoreCalculator(self.instance).calculate()
+# class RiskBasedUnderwaterIntervalScoreCalculator(BaseCalculator):
+#     vh=Decimal(3)
+#     h=Decimal(5)
+#     m=Decimal(7)
+#     l=Decimal(10)
+#     vl=Decimal(12)
+#     score_max = Decimal(80)
+#     score_min = Decimal(3)
+#     def _calculate(self):
+#         clof_4 = PlatformVintageScoreCalculator(self.instance).calculate()
+#         clof_7 = PlatformLegsAndBracingScoreCalculator(self.instance).calculate()
+#         clof_11 = LegPileGroutingScoreCalculator(self.instance).calculate()
+#         clof_14 = ShallowGasScoreCalculator(self.instance).calculate()
+#         clof_22 = LastInspectionScoreCalculator(self.instance).calculate()
+#         clof_27 = MechanicalDamageScoreCalculator(self.instance).calculate()
+#         clof_45 = CorrosionScoreCalculator(self.instance).calculate()
+#         clof_63 = FloodedMemberScoreCalculator(self.instance).calculate()
+#         clof_49 = MarineGrowthScoreCalculator(self.instance).calculate()
+#         clof_52 = ScourCalculator(self.instance).calculate()
+#         clof_67 = UnprotectedAppurtenancesScoreCalculator(self.instance).calculate()
+#         clof_70 = DeckLoadScoreCalculator(self.instance).calculate()
+#         clof_77 = DeckElevationWaveInDeckScoreCalculator(self.instance).calculate()
+#         clof_81 = AdditionalAppurtenanceScoreCalculator(self.instance).calculate()
+#         clof_84 = FatigueLoadScoreCalculator(self.instance).calculate()
         
-        clof_86 = clof_4 + clof_14 + clof_22 + clof_27 + clof_45 + clof_63 + clof_49 + clof_52 + clof_67 + clof_70 + clof_77 + clof_81 + clof_84 + clof_11 + clof_4 + clof_7
+#         clof_86 = clof_4 + clof_14 + clof_22 + clof_27 + clof_45 + clof_63 + clof_49 + clof_52 + clof_67 + clof_70 + clof_77 + clof_81 + clof_84 + clof_11 + clof_4 + clof_7
 
-        clof_85 = Decimal(0)
-        if self.instance.reserve_strength_ratio_score.rsr_override is True:
-            rsr_value = self.instance.reserve_strength_ratio_score.reserve_strength_ratio
-            if rsr_value <= Decimal(1):
-                clof_85 = Decimal(680)
-            elif rsr_value > Decimal(1) and rsr_value < Decimal(1.32):
-                clof_85=Decimal(490)
-            elif rsr_value >= Decimal(1.32) and rsr_value < Decimal(1.5):
-                clof_85 = Decimal(310)
-            elif rsr_value >= Decimal(1.5) and rsr_value < Decimal(1.9):
-                clof_85 = Decimal(120)
-            elif rsr_value >= Decimal(1.9):
-                clof_85 = Decimal(60)
+#         clof_85 = Decimal(0)
+#         if self.instance.reserve_strength_ratio_score.rsr_override is True:
+#             rsr_value = self.instance.reserve_strength_ratio_score.reserve_strength_ratio
+#             if rsr_value <= Decimal(1):
+#                 clof_85 = Decimal(680)
+#             elif rsr_value > Decimal(1) and rsr_value < Decimal(1.32):
+#                 clof_85=Decimal(490)
+#             elif rsr_value >= Decimal(1.32) and rsr_value < Decimal(1.5):
+#                 clof_85 = Decimal(310)
+#             elif rsr_value >= Decimal(1.5) and rsr_value < Decimal(1.9):
+#                 clof_85 = Decimal(120)
+#             elif rsr_value >= Decimal(1.9):
+#                 clof_85 = Decimal(60)
 
-            clof_87 = clof_22 + clof_45 + clof_67 + clof_84 + clof_85
-        try:
-            if clof_87:
-                if clof_87 >= Decimal(680):
-                    clof_88 = Decimal(5)
-                elif clof_87 >= Decimal(490) and clof_87 < Decimal(680):
-                    clof_88 = Decimal(4)
-                elif clof_87 >= Decimal(310) and clof_87 < Decimal(490):
-                    clof_88 = Decimal(3)
-                elif clof_87 >= Decimal(120) and clof_87 < Decimal(310):
-                    clof_88 = Decimal(2)
-                elif clof_87 < Decimal(120):
-                    clof_88 = Decimal(1)
-        except:
-                if clof_86 >= Decimal(680):
-                    clof_88 = Decimal(5)
-                elif clof_86 >= Decimal(490) and clof_86 < Decimal(680):
-                    clof_88 = Decimal(4)
-                elif clof_86 >= Decimal(310) and clof_86 < Decimal(490):
-                    clof_88 = Decimal(3)
-                elif clof_86 >= Decimal(120) and clof_86 < Decimal(310):
-                    clof_88 = Decimal(2)
-                elif clof_86 < Decimal(120):
-                    clof_88 = Decimal(1)
+#             clof_87 = clof_22 + clof_45 + clof_67 + clof_84 + clof_85
+#         try:
+#             if clof_87:
+#                 if clof_87 >= Decimal(680):
+#                     clof_88 = Decimal(5)
+#                 elif clof_87 >= Decimal(490) and clof_87 < Decimal(680):
+#                     clof_88 = Decimal(4)
+#                 elif clof_87 >= Decimal(310) and clof_87 < Decimal(490):
+#                     clof_88 = Decimal(3)
+#                 elif clof_87 >= Decimal(120) and clof_87 < Decimal(310):
+#                     clof_88 = Decimal(2)
+#                 elif clof_87 < Decimal(120):
+#                     clof_88 = Decimal(1)
+#         except:
+#                 if clof_86 >= Decimal(680):
+#                     clof_88 = Decimal(5)
+#                 elif clof_86 >= Decimal(490) and clof_86 < Decimal(680):
+#                     clof_88 = Decimal(4)
+#                 elif clof_86 >= Decimal(310) and clof_86 < Decimal(490):
+#                     clof_88 = Decimal(3)
+#                 elif clof_86 >= Decimal(120) and clof_86 < Decimal(310):
+#                     clof_88 = Decimal(2)
+#                 elif clof_86 < Decimal(120):
+#                     clof_88 = Decimal(1)
 
-        return clof_88
+#         return clof_88
 
 
 class PlatformLegsAndBracingScoreCalculator(BaseCalculator):
@@ -577,6 +580,42 @@ class CorrosionScoreCalculator(BaseCalculator):
 
         return clof_45
 
+class MarineGrowthEachElevationCalculator(BaseCalculator):
+    override_applied = True
+    score_max = Decimal(20)
+    score_min = Decimal(0)
+    mg_h = Decimal(10)
+    mg_m = Decimal(7)
+    mg_l = Decimal(3)
+    w_mg = Decimal(2)
+
+    def _calculate(self):
+        marine_growths = self.instance.marine_growths
+        clof_47 = []
+        if marine_growths.count() > 0:
+
+            for marine_growth in marine_growths.all():
+                if (
+                        marine_growth.marine_growth_inspected_thickness
+                        > marine_growth.marine_growth_design_thickness
+                ):
+                    if (
+                            marine_growth.marine_growth_inspected_thickness
+                            > marine_growth.marine_growth_design_thickness * Decimal("1.5")
+                    ):
+                        if (
+                                marine_growth.marine_growth_inspected_thickness
+                                > marine_growth.marine_growth_design_thickness * Decimal("2")
+                        ):
+                            clof_47.append(self.mg_h)
+                        else:
+                            clof_47.append(self.mg_m)
+                    else:
+                        clof_47.append(self.mg_l)
+                else:
+                    clof_47.append(0)
+        
+        return clof_47
 
 class MarineGrowthScoreCalculator(BaseCalculator):
     override_applied = True
@@ -1349,13 +1388,9 @@ class RiskRankingCalculator:
         clof_105 = FinalConsequenceCategoryCalculator(self.instance)._calculate()
 
         if clof_105 == "A":
-            if clof_88 == 1:
+            if clof_88 == 1 or clof_88 == 2:
                 clof_106 = 'VL'
-            elif clof_88 == 2:
-                clof_106 = 'VL'
-            elif clof_88 == 3:
-                clof_106 = 'L'
-            elif clof_88 == 4:
+            elif clof_88 == 3 or clof_88 == 4:
                 clof_106 = 'L'
             elif clof_88 == 5:
                 clof_106 = 'M'
@@ -1363,9 +1398,7 @@ class RiskRankingCalculator:
         elif clof_105 == "B":
             if clof_88 == 1:
                 clof_106 = 'VL'
-            elif clof_88 == 2:
-                clof_106 = 'L'
-            elif clof_88 == 3:
+            elif clof_88 == 2 or clof_88 == 3:
                 clof_106 = 'L'
             elif clof_88 == 4:
                 clof_106 = 'M'
@@ -1373,15 +1406,11 @@ class RiskRankingCalculator:
                 clof_106 = 'H'
         
         elif clof_105 == "C":
-            if clof_88 == 1:
-                clof_106 = 'L'
-            elif clof_88 == 2:
+            if clof_88 == 1 or clof_88 == 2:
                 clof_106 = 'L'
             elif clof_88 == 3:
                 clof_106 = 'M'
-            elif clof_88 == 4:
-                clof_106 = 'H'
-            elif clof_88 == 5:
+            elif clof_88 == 4 or clof_88 == 5:
                 clof_106 = 'H'
         
         elif clof_105 == "D":
@@ -1389,9 +1418,7 @@ class RiskRankingCalculator:
                 clof_106 = 'L'
             elif clof_88 == 2:
                 clof_106 = 'M'
-            elif clof_88 == 3:
-                clof_106 = 'H'
-            elif clof_88 == 4:
+            elif clof_88 == 3 or clof_88 == 4:
                 clof_106 = 'H'
             elif clof_88 == 5:
                 clof_106 = 'VH'
@@ -1399,14 +1426,31 @@ class RiskRankingCalculator:
         elif clof_105 == "E":
             if clof_88 == 1:
                 clof_106 = 'M'
-            elif clof_88 == 2:
+            elif clof_88 == 2 or clof_88 == 3:
                 clof_106 = 'H'
-            elif clof_88 == 3:
-                clof_106 = 'H'
-            elif clof_88 == 4:
+            elif clof_88 == 4 or clof_88 == 5:
                 clof_106 = 'VH'
-            elif clof_88 == 5:
-                clof_106 = 'VH'
-
 
         return clof_106
+
+class RiskBasedUnderwaterIntervalScoreCalculator:
+    instance: Platform
+
+    def __init__(self, instance: Platform):
+        self.instance = instance
+
+    def _calculate(self):
+        # clof_106 = RiskRankingCalculator(self.instance)._calculate()
+
+        # if clof_106 == 'VL':
+        #     clof_107 = 12
+        # if clof_106 == 'L':
+        #     clof_107 = 10
+        # if clof_106 == 'M':
+        #     clof_107 = 7
+        # if clof_106 == 'H':
+        #     clof_107 = 5
+        # if clof_106 == 'VH':
+        #     clof_107 = 3
+        return Decimal(3)
+

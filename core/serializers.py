@@ -35,7 +35,8 @@ from .calculators import (
     Level1NextInspectionDateCalculator,
     Level2NextInspectionDateCalculator,
     Level3NextInspectionDateCalculator,
-    Next10YearsInspectionPlanCalculator
+    Next10YearsInspectionPlanCalculator,
+    MarineGrowthEachElevationCalculator
 )
 from .models import (
     User,
@@ -299,6 +300,8 @@ class PlatformSerializer(serializers.ModelSerializer):
 
     marine_growths_score = serializers.SerializerMethodField(read_only=True)
 
+    marine_growth_each_elevation = serializers.SerializerMethodField(read_only=True)
+
     scour = ScourSerializer()
 
     scour_score = serializers.SerializerMethodField(read_only=True)
@@ -446,10 +449,6 @@ class PlatformSerializer(serializers.ModelSerializer):
         return ExposureCategorySurveyLevel3Calculator(obj)._calculate()
 
     @lru_cache(maxsize=1)
-    def get_risk_based_underwater_inspection_interval(self, obj: Platform):
-        return RiskBasedUnderwaterIntervalScoreCalculator(obj).calculate()
-
-    @lru_cache(maxsize=1)
     def get_platform_vintage_score(self, obj: Platform):
         return PlatformVintageScoreCalculator(obj).calculate()
 
@@ -480,6 +479,10 @@ class PlatformSerializer(serializers.ModelSerializer):
     @lru_cache(maxsize=1)
     def get_marine_growths_score(self, obj: Platform):
         return MarineGrowthScoreCalculator(obj).calculate()
+
+    @lru_cache(maxsize=1)
+    def get_marine_growth_each_elevation(self, obj: Platform):
+        return MarineGrowthEachElevationCalculator(obj).calculate()
 
     @lru_cache(maxsize=1)
     def get_scour_score(self, obj: Platform):
@@ -575,6 +578,75 @@ class PlatformSerializer(serializers.ModelSerializer):
             return 2
         else:
             return 1
+
+    @lru_cache(maxsize=1)
+    def get_risk_ranking(self, obj: Platform):
+        clof_88 = self.get_lof_ranking(obj)
+        clof_105 = FinalConsequenceCategoryCalculator(obj)._calculate()
+        clof_106 = None
+        if clof_105 == "A":
+            if clof_88 == 1 or clof_88 == 2:
+                clof_106 = 'VL'
+            elif clof_88 == 3 or clof_88 == 4:
+                clof_106 = 'L'
+            elif clof_88 == 5:
+                clof_106 = 'M'
+        
+        elif clof_105 == "B":
+            if clof_88 == 1:
+                clof_106 = 'VL'
+            elif clof_88 == 2 or clof_88 == 3:
+                clof_106 = 'L'
+            elif clof_88 == 4:
+                clof_106 = 'M'
+            elif clof_88 == 5:
+                clof_106 = 'H'
+        
+        elif clof_105 == "C":
+            if clof_88 == 1 or clof_88 == 2:
+                clof_106 = 'L'
+            elif clof_88 == 3:
+                clof_106 = 'M'
+            elif clof_88 == 4 or clof_88 == 5:
+                clof_106 = 'H'
+        
+        elif clof_105 == "D":
+            if clof_88 == 1:
+                clof_106 = 'L'
+            elif clof_88 == 2:
+                clof_106 = 'M'
+            elif clof_88 == 3 or clof_88 == 4:
+                clof_106 = 'H'
+            elif clof_88 == 5:
+                clof_106 = 'VH'
+        
+        elif clof_105 == "E":
+            if clof_88 == 1:
+                clof_106 = 'M'
+            elif clof_88 == 2 or clof_88 == 3:
+                clof_106 = 'H'
+            elif clof_88 == 4 or clof_88 == 5:
+                clof_106 = 'VH'
+
+        return clof_106
+
+    @lru_cache(maxsize=1)
+    def get_risk_based_underwater_inspection_interval(self, obj: Platform):
+        clof_106 = self.get_risk_ranking(obj)
+        clof_107 = None
+        if clof_106 == 'VL':
+            clof_107 = 12
+        elif clof_106 == 'L':
+            clof_107 = 10
+        elif clof_106 == 'M':
+            clof_107 = 7
+        elif clof_106 == 'H':
+            clof_107 = 5
+        elif clof_106 == 'VH':
+            clof_107 = 3
+        
+        return clof_107
+
 
     def get_calculated_environmental_consequence(self, obj: Platform):
         return EnvironmentalConsequenceCategoryCalculator(obj).calculate()

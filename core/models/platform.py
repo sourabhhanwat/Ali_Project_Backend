@@ -159,8 +159,11 @@ class MarineGrowthQuerySet(models.QuerySet):
 
 
 class MarineGrowth(models.Model):
-    marine_growth_depths = models.DecimalField(
-        max_digits=10, decimal_places=5, verbose_name="[ILOF-29] marine growth depths",
+    marine_growth_depths_from_el = models.DecimalField(
+        max_digits=10, decimal_places=5, verbose_name="[ILOF-29] marine growth depths", null=True, blank=True
+    )
+    marine_growth_depths_to_el = models.DecimalField(
+        max_digits=10, decimal_places=5, verbose_name="[ILOF-29] marine growth depths", null=True, blank=True
     )
     marine_growth_inspected_thickness = models.DecimalField(
         max_digits=10,

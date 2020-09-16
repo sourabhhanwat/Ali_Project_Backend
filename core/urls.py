@@ -12,7 +12,8 @@ from .views import (
     PlatformMannedStatusViewSet,
     MarineGrowthViewSet,
     UserList,
-    CategoryList
+    CategoryList,
+    SaveProject
 )
 
 router = DefaultRouter()
@@ -30,6 +31,7 @@ urlpatterns = [
     path("users/me/", UserViewSet.as_view({"get": "retrieve"}), name="user-detail"),
     path("users/", UserList.as_view(), name="user-list"),
     path("category/", CategoryList.as_view(), name="category-list"),
+    path("saveproject/", SaveProject.as_view(), name="project-list"),
     path("", include(router.urls))
     # fmt: on
 ]

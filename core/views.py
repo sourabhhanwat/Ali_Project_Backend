@@ -42,6 +42,12 @@ class UserList(APIView):
         users = User.objects.all()
         return Response(UserSerializer(users, many=True).data)
 
+class SaveProject(APIView):
+    def post(self,request):
+        data=request.data
+        print(data)
+        return Response('dummy test')
+
 class CategoryList(APIView):
     def get(self,request):
         categories = ['A','B','C','D','E']

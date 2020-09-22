@@ -155,7 +155,6 @@ class Next10YearsInspectionPlanCalculator:
 
                 date_1 = datetime.now().year + 1
                 date_10 = datetime.now().year + 9
-                print("next ",next_date)
                 if next_date == level_1_inspection_date.year and next_date == level_2_inspection_date.year and next_date == level_3_inspection_date.year:
                     next_inspection.append({"year":next_date,
                                             "level":"Level 1, Level 2, Level 3"})
@@ -1312,8 +1311,6 @@ class ExposureCategoryLevelCalculator:
     def _calculate(self):
         clof_105 = FinalConsequenceCategoryCalculator(self.instance)._calculate()
         clof_90 = self.instance.platform_manned_status.ranking
-        print("clof 90 ",clof_90)
-        print("clof 105 ",clof_105)
         clof_108=None
         if clof_90 == 'E' or clof_90 == 'D':
             clof_108 = 'L-1'

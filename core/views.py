@@ -43,10 +43,37 @@ class UserList(APIView):
         return Response(UserSerializer(users, many=True).data)
 
 class SaveProject(APIView):
+    def get(self,request):
+        projects = Project.objects.all()
+        p_serializers = ProjectSerializer(projects, many=True).data
+        return Response(p_serializers)
     def post(self,request):
         data=request.data
         print(data)
-        return Response('dummy test')
+        name = data.get('Name')
+        username = data.get('Responsible')
+        user = User.objects.filter(username=username).first()
+        if not user:
+            user = None
+        print("user ",user)
+        description = data.get('Description')
+        startdate = data.get('StartDate')
+        enddate = data.get('EndDate')
+        project = Project(
+            name=name,
+            description=description,
+            start_date=startdate,
+            end_date=enddate,
+        )
+        project.save()
+        projectowner = ProjectOwnership(
+            project=project,
+            user=user,
+            access_type='M'
+        )
+        projectowner.save()
+        print(name)
+        return Response({"aman":"aman"})
 
 class CategoryList(APIView):
     def get(self,request):

@@ -52,11 +52,7 @@ class SaveProject(APIView):
             data=request.data
             print(data)
             name = data.get('Name')
-            username = data.get('Responsible')
-            user = User.objects.filter(username=username).first()
-            if not user:
-                user = None
-            print("user ",user)
+            user_id = data.get('Responsible')
             description = data.get('Description')
             startdate = data.get('StartDate')
             enddate = data.get('EndDate')
@@ -69,7 +65,7 @@ class SaveProject(APIView):
             project.save()
             projectowner = ProjectOwnership(
                 project=project,
-                user=user,
+                user_id=user_id,
                 access_type='M'
             )
             projectowner.save()

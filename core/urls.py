@@ -14,7 +14,8 @@ from .views import (
     UserList,
     CategoryList,
     SaveProject,
-    SavePlatform
+    SavePlatform,
+    SaveMarineGrowth
 )
 
 router = DefaultRouter()
@@ -34,6 +35,7 @@ urlpatterns = [
     path("category/", CategoryList.as_view(), name="category-list"),
     path("saveproject/", SaveProject.as_view(), name="project-list"),
     path("saveplatform/", SavePlatform.as_view(), name="project-list"),
+    path("savemarinegrowth/", SaveMarineGrowth.as_view(), name="project-list"),
     path("", include(router.urls))
     # fmt: on
 ]

@@ -81,6 +81,12 @@ class SavePlatform(APIView):
     def post(self, request):
         return Response("save platform Post")
 
+class SaveMarineGrowth(APIView):
+    def get(self,request):
+        return Response("save Marine growth")
+    def post(self,request):
+        return Response("save Marine growth post")
+
 class CategoryList(APIView):
     def get(self,request):
         categories = ['A','B','C','D','E']

@@ -587,9 +587,17 @@ class MarineGrowthEachElevationCalculator(BaseCalculator):
     mg_m = Decimal(7)
     mg_l = Decimal(3)
     w_mg = Decimal(2)
+    instance: Platform
+
+    def __init__(self, instance: Platform):
+        self.instance = instance
 
     def _calculate(self):
         marine_growths = self.instance.marine_growths
+        if self.override_applied:
+            if self.instance.reserve_strength_ratio_score.rsr_override:
+                marine=[]
+                return marine
         clof_47 = []
         if marine_growths.count() > 0:
 

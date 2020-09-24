@@ -48,44 +48,92 @@ class SaveProject(APIView):
         p_serializers = ProjectSerializer(projects, many=True).data
         return Response(p_serializers)
     def post(self,request):
-        data=request.data
-        print(data)
-        name = data.get('Name')
-        username = data.get('Responsible')
-        user = User.objects.filter(username=username).first()
-        if not user:
-            user = None
-        print("user ",user)
-        description = data.get('Description')
-        startdate = data.get('StartDate')
-        enddate = data.get('EndDate')
-        project = Project(
-            name=name,
-            description=description,
-            start_date=startdate,
-            end_date=enddate,
-        )
-        project.save()
-        projectowner = ProjectOwnership(
-            project=project,
-            user=user,
-            access_type='M'
-        )
-        projectowner.save()
-        print(name)
-        return Response({"aman":"aman"})
+        try:
+            data=request.data
+            print(data)
+            name = data.get('Name')
+            username = data.get('Responsible')
+            user = User.objects.filter(username=username).first()
+            if not user:
+                user = None
+            print("user ",user)
+            description = data.get('Description')
+            startdate = data.get('StartDate')
+            enddate = data.get('EndDate')
+            project = Project(
+                name=name,
+                description=description,
+                start_date=startdate,
+                end_date=enddate,
+            )
+            project.save()
+            projectowner = ProjectOwnership(
+                project=project,
+                user=user,
+                access_type='M'
+            )
+            projectowner.save()
+            print(name)
+            return Response({"status":True})
+        except:
+            return Response({'status':False})
         
 class SavePlatform(APIView):
     def get(self,request):
         return Response('Save Platform')
     def post(self, request):
-        return Response("save platform Post")
+        try:
+            data = request.data
+            print(data)
+            name = data.get('Name')
+            description = data.get('Description')
+            startdate = data.get('StartDate')
+            user_id = data.get('Responsible')
+            project_id = data.get('Project')
+            print('name ',name)
+            print('description ',description)
+            platform = Platform(
+                name = name,
+                description = description,
+                project_id = project_id
+            )
+            platform.save()
+
+            platformowner = PlatformOwnership(
+                platform = platform,
+                user_id = user_id,
+                access_type='M'
+            )
+            platformowner.save()
+            print(data)
+            return Response({"status":True})
+        except:
+            return Response({'status':False})
 
 class SaveMarineGrowth(APIView):
     def get(self,request):
         return Response("save Marine growth")
     def post(self,request):
-        return Response("save Marine growth post")
+        try:
+            data = request.data
+            mg_depths_from_el = data.get('marine_growth_depths_from_el')
+            mg_depths_to_el = data.get('marine_growth_depths_to_el')
+            mg_design_thickness = data.get('marine_growth_design_thickness')
+            mg_inspected_thickness = data.get('marine_growth_inspected_thickness')
+            platform_id = data.get('platform_id')
+            mg = MarineGrowth(
+                marine_growth_depths_from_el = mg_depths_from_el,
+                marine_growth_depths_to_el = mg_depths_to_el,
+                marine_growth_inspected_thickness = mg_inspected_thickness,
+                marine_growth_design_thickness = mg_design_thickness,
+                platform_id = platform_id
+            )
+            mg.save()
+
+            print(data)
+            return Response({"status":True})
+        except:
+            return Response({"status":False})
 
 class CategoryList(APIView):
     def get(self,request):

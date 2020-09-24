@@ -482,7 +482,7 @@ class PlatformSerializer(serializers.ModelSerializer):
 
     @lru_cache(maxsize=1)
     def get_marine_growth_each_elevation(self, obj: Platform):
-        return MarineGrowthEachElevationCalculator(obj).calculate()
+        return MarineGrowthEachElevationCalculator(obj)._calculate()
 
     @lru_cache(maxsize=1)
     def get_scour_score(self, obj: Platform):

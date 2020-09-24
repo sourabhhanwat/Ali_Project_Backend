@@ -679,8 +679,8 @@ class Platform(models.Model):
 
     environmental_consequence_description = models.CharField(max_length=300, null=True, blank=True)
     economic_consequence_description = models.CharField(max_length=300, null=True, blank=True)
-    environmental_consequence_category = models.CharField(max_length=10, null=True, blank=True)
-    economic_consequence_category = models.CharField(max_length=10, null=True, blank=True)
+    environmental_consequence_category = models.CharField(max_length=10, null=True, blank=True,default='A')
+    economic_consequence_category = models.CharField(max_length=10, null=True, blank=True,default='A')
     level_1_last_inspection_date = models.DateField(null=True,blank=True)
     level_2_last_inspection_date = models.DateField(null=True,blank=True)
     level_3_last_inspection_date = models.DateField(null=True,blank=True)

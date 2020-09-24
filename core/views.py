@@ -74,6 +74,12 @@ class SaveProject(APIView):
         projectowner.save()
         print(name)
         return Response({"aman":"aman"})
+        
+class SavePlatform(APIView):
+    def get(self,request):
+        return Response('Save Platform')
+    def post(self, request):
+        return Response("save platform Post")
 
 class CategoryList(APIView):
     def get(self,request):
@@ -135,7 +141,7 @@ class PlatformViewSet(
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
         instance: Platform = self.get_object()
-        print("\n*********** ",request.data)
+        # print("\n*********** ",request.data)
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
 

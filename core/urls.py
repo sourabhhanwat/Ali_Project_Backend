@@ -13,7 +13,8 @@ from .views import (
     MarineGrowthViewSet,
     UserList,
     CategoryList,
-    SaveProject
+    SaveProject,
+    SavePlatform
 )
 
 router = DefaultRouter()
@@ -32,6 +33,7 @@ urlpatterns = [
     path("users/", UserList.as_view(), name="user-list"),
     path("category/", CategoryList.as_view(), name="category-list"),
     path("saveproject/", SaveProject.as_view(), name="project-list"),
+    path("saveplatform/", SavePlatform.as_view(), name="project-list"),
     path("", include(router.urls))
     # fmt: on
 ]

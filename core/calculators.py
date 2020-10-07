@@ -137,12 +137,36 @@ class Next10YearsInspectionPlanCalculator:
         level_2_interval = self.instance.level_2_selected_inspection_interval_for_next_inspection
         level_3_interval = self.instance.level_3_selected_inspection_interval_for_next_inspection
 
+        current_year = datetime.now().year
         if level_1_inspection_date is not None:
             level_1_inspection_date = level_1_inspection_date + relativedelta(years=level_1_interval)
+            if level_1_inspection_date.year < current_year:
+                for x in range(0,10):
+                    level_1_inspection_date = level_1_inspection_date + relativedelta(years=level_1_interval)
+                    if level_1_inspection_date.year >= datetime.now().year:
+                        break
+        else:
+            level_1_inspection_date = datetime(1900, 5, 17)
+
         if level_2_inspection_date is not None:
             level_2_inspection_date = level_2_inspection_date + relativedelta(years=level_2_interval)
+            if level_2_inspection_date.year < current_year:
+                for x in range(0,10):
+                    level_2_inspection_date = level_2_inspection_date + relativedelta(years=level_2_interval)
+                    if level_2_inspection_date.year >= datetime.now().year:
+                        break
+        else:
+            level_2_inspection_date = datetime(1900, 5, 17)
+
         if level_3_inspection_date is not None:
             level_3_inspection_date = level_3_inspection_date + relativedelta(years=level_3_interval)
+            if level_3_inspection_date.year < current_year:
+                for x in range(0,10):
+                    level_3_inspection_date = level_3_inspection_date + relativedelta(years=level_3_interval)
+                    if level_3_inspection_date.year >= datetime.now().year:
+                        break
+        else:
+            level_3_inspection_date = datetime(1900, 5, 17)
         
         next_inspection=[]
         level_1_count = 0
@@ -152,7 +176,7 @@ class Next10YearsInspectionPlanCalculator:
             for i in range(0,10):
 
                 next_date = datetime.now().year + i
-
+            
                 date_1 = datetime.now().year + 1
                 date_10 = datetime.now().year + 9
                 if next_date == level_1_inspection_date.year and next_date == level_2_inspection_date.year and next_date == level_3_inspection_date.year:
@@ -182,6 +206,11 @@ class Next10YearsInspectionPlanCalculator:
                 elif next_date == level_3_inspection_date.year:
                     next_inspection.append({"year":next_date,
                                             "level":"Level 3"})
+                
+                else:
+                    next_inspection.append({"year":next_date,
+                                            "level":"No Inspection"})
+
 
                 if level_1_inspection_date.year==next_date:
                     level_1_inspection_date = level_1_inspection_date + relativedelta(years=level_1_interval)
@@ -199,76 +228,6 @@ class Next10YearsInspectionPlanCalculator:
                                         "level":""})
 
         return next_inspection
-        # except:
-        #     return None
-
-# class RiskBasedUnderwaterIntervalScoreCalculator(BaseCalculator):
-#     vh=Decimal(3)
-#     h=Decimal(5)
-#     m=Decimal(7)
-#     l=Decimal(10)
-#     vl=Decimal(12)
-#     score_max = Decimal(80)
-#     score_min = Decimal(3)
-#     def _calculate(self):
-#         clof_4 = PlatformVintageScoreCalculator(self.instance).calculate()
-#         clof_7 = PlatformLegsAndBracingScoreCalculator(self.instance).calculate()
-#         clof_11 = LegPileGroutingScoreCalculator(self.instance).calculate()
-#         clof_14 = ShallowGasScoreCalculator(self.instance).calculate()
-#         clof_22 = LastInspectionScoreCalculator(self.instance).calculate()
-#         clof_27 = MechanicalDamageScoreCalculator(self.instance).calculate()
-#         clof_45 = CorrosionScoreCalculator(self.instance).calculate()
-#         clof_63 = FloodedMemberScoreCalculator(self.instance).calculate()
-#         clof_49 = MarineGrowthScoreCalculator(self.instance).calculate()
-#         clof_52 = ScourCalculator(self.instance).calculate()
-#         clof_67 = UnprotectedAppurtenancesScoreCalculator(self.instance).calculate()
-#         clof_70 = DeckLoadScoreCalculator(self.instance).calculate()
-#         clof_77 = DeckElevationWaveInDeckScoreCalculator(self.instance).calculate()
-#         clof_81 = AdditionalAppurtenanceScoreCalculator(self.instance).calculate()
-#         clof_84 = FatigueLoadScoreCalculator(self.instance).calculate()
-        
-#         clof_86 = clof_4 + clof_14 + clof_22 + clof_27 + clof_45 + clof_63 + clof_49 + clof_52 + clof_67 + clof_70 + clof_77 + clof_81 + clof_84 + clof_11 + clof_4 + clof_7
-
-#         clof_85 = Decimal(0)
-#         if self.instance.reserve_strength_ratio_score.rsr_override is True:
-#             rsr_value = self.instance.reserve_strength_ratio_score.reserve_strength_ratio
-#             if rsr_value <= Decimal(1):
-#                 clof_85 = Decimal(680)
-#             elif rsr_value > Decimal(1) and rsr_value < Decimal(1.32):
-#                 clof_85=Decimal(490)
-#             elif rsr_value >= Decimal(1.32) and rsr_value < Decimal(1.5):
-#                 clof_85 = Decimal(310)
-#             elif rsr_value >= Decimal(1.5) and rsr_value < Decimal(1.9):
-#                 clof_85 = Decimal(120)
-#             elif rsr_value >= Decimal(1.9):
-#                 clof_85 = Decimal(60)
-
-#             clof_87 = clof_22 + clof_45 + clof_67 + clof_84 + clof_85
-#         try:
-#             if clof_87:
-#                 if clof_87 >= Decimal(680):
-#                     clof_88 = Decimal(5)
-#                 elif clof_87 >= Decimal(490) and clof_87 < Decimal(680):
-#                     clof_88 = Decimal(4)
-#                 elif clof_87 >= Decimal(310) and clof_87 < Decimal(490):
-#                     clof_88 = Decimal(3)
-#                 elif clof_87 >= Decimal(120) and clof_87 < Decimal(310):
-#                     clof_88 = Decimal(2)
-#                 elif clof_87 < Decimal(120):
-#                     clof_88 = Decimal(1)
-#         except:
-#                 if clof_86 >= Decimal(680):
-#                     clof_88 = Decimal(5)
-#                 elif clof_86 >= Decimal(490) and clof_86 < Decimal(680):
-#                     clof_88 = Decimal(4)
-#                 elif clof_86 >= Decimal(310) and clof_86 < Decimal(490):
-#                     clof_88 = Decimal(3)
-#                 elif clof_86 >= Decimal(120) and clof_86 < Decimal(310):
-#                     clof_88 = Decimal(2)
-#                 elif clof_86 < Decimal(120):
-#                     clof_88 = Decimal(1)
-
-#         return clof_88
 
 
 class PlatformLegsAndBracingScoreCalculator(BaseCalculator):
@@ -1329,12 +1288,12 @@ class ExposureCategoryLevelCalculator:
                 clof_108 = 'L-2'
         elif clof_90 == 'A' or clof_90 == 'B':
             if clof_105 == 'E' or clof_105 == 'D':
-                clof_108 == 'L-1'
+                clof_108 = 'L-1'
             elif clof_105 == 'C':
                 clof_108 = 'L-2'
             elif clof_105 == 'B' or clof_105 == 'A':
                 clof_108 = 'L-3'
-    
+
         return clof_108
 
 class ExposureCategorySurveyLevel1Calculator:
@@ -1382,80 +1341,80 @@ class ExposureCategorySurveyLevel3Calculator:
             clof_109 = '11-15'
         return clof_109
 
-class RiskRankingCalculator:
-    instance: Platform
+# class RiskRankingCalculator:
+#     instance: Platform
 
-    def __init__(self, instance: Platform):
-        self.instance = instance
+#     def __init__(self, instance: Platform):
+#         self.instance = instance
 
-    def _calculate(self):
-        clof_88 = RiskBasedUnderwaterIntervalScoreCalculator(self.instance)._calculate()
-        clof_105 = FinalConsequenceCategoryCalculator(self.instance)._calculate()
+#     def _calculate(self):
+#         clof_88 = RiskBasedUnderwaterIntervalScoreCalculator(self.instance)._calculate()
+#         clof_105 = FinalConsequenceCategoryCalculator(self.instance)._calculate()
 
-        if clof_105 == "A":
-            if clof_88 == 1 or clof_88 == 2:
-                clof_106 = 'VL'
-            elif clof_88 == 3 or clof_88 == 4:
-                clof_106 = 'L'
-            elif clof_88 == 5:
-                clof_106 = 'M'
+#         if clof_105 == "A":
+#             if clof_88 == 1 or clof_88 == 2:
+#                 clof_106 = 'VL'
+#             elif clof_88 == 3 or clof_88 == 4:
+#                 clof_106 = 'L'
+#             elif clof_88 == 5:
+#                 clof_106 = 'M'
         
-        elif clof_105 == "B":
-            if clof_88 == 1:
-                clof_106 = 'VL'
-            elif clof_88 == 2 or clof_88 == 3:
-                clof_106 = 'L'
-            elif clof_88 == 4:
-                clof_106 = 'M'
-            elif clof_88 == 5:
-                clof_106 = 'H'
+#         elif clof_105 == "B":
+#             if clof_88 == 1:
+#                 clof_106 = 'VL'
+#             elif clof_88 == 2 or clof_88 == 3:
+#                 clof_106 = 'L'
+#             elif clof_88 == 4:
+#                 clof_106 = 'M'
+#             elif clof_88 == 5:
+#                 clof_106 = 'H'
         
-        elif clof_105 == "C":
-            if clof_88 == 1 or clof_88 == 2:
-                clof_106 = 'L'
-            elif clof_88 == 3:
-                clof_106 = 'M'
-            elif clof_88 == 4 or clof_88 == 5:
-                clof_106 = 'H'
+#         elif clof_105 == "C":
+#             if clof_88 == 1 or clof_88 == 2:
+#                 clof_106 = 'L'
+#             elif clof_88 == 3:
+#                 clof_106 = 'M'
+#             elif clof_88 == 4 or clof_88 == 5:
+#                 clof_106 = 'H'
         
-        elif clof_105 == "D":
-            if clof_88 == 1:
-                clof_106 = 'L'
-            elif clof_88 == 2:
-                clof_106 = 'M'
-            elif clof_88 == 3 or clof_88 == 4:
-                clof_106 = 'H'
-            elif clof_88 == 5:
-                clof_106 = 'VH'
+#         elif clof_105 == "D":
+#             if clof_88 == 1:
+#                 clof_106 = 'L'
+#             elif clof_88 == 2:
+#                 clof_106 = 'M'
+#             elif clof_88 == 3 or clof_88 == 4:
+#                 clof_106 = 'H'
+#             elif clof_88 == 5:
+#                 clof_106 = 'VH'
         
-        elif clof_105 == "E":
-            if clof_88 == 1:
-                clof_106 = 'M'
-            elif clof_88 == 2 or clof_88 == 3:
-                clof_106 = 'H'
-            elif clof_88 == 4 or clof_88 == 5:
-                clof_106 = 'VH'
+#         elif clof_105 == "E":
+#             if clof_88 == 1:
+#                 clof_106 = 'M'
+#             elif clof_88 == 2 or clof_88 == 3:
+#                 clof_106 = 'H'
+#             elif clof_88 == 4 or clof_88 == 5:
+#                 clof_106 = 'VH'
 
-        return clof_106
+#         return clof_106
 
-class RiskBasedUnderwaterIntervalScoreCalculator:
-    instance: Platform
+# class RiskBasedUnderwaterIntervalScoreCalculator:
+#     instance: Platform
 
-    def __init__(self, instance: Platform):
-        self.instance = instance
+#     def __init__(self, instance: Platform):
+#         self.instance = instance
 
-    def _calculate(self):
-        # clof_106 = RiskRankingCalculator(self.instance)._calculate()
+#     def _calculate(self):
+#         # clof_106 = RiskRankingCalculator(self.instance)._calculate()
 
-        # if clof_106 == 'VL':
-        #     clof_107 = 12
-        # if clof_106 == 'L':
-        #     clof_107 = 10
-        # if clof_106 == 'M':
-        #     clof_107 = 7
-        # if clof_106 == 'H':
-        #     clof_107 = 5
-        # if clof_106 == 'VH':
-        #     clof_107 = 3
-        return Decimal(3)
+#         # if clof_106 == 'VL':
+#         #     clof_107 = 12
+#         # if clof_106 == 'L':
+#         #     clof_107 = 10
+#         # if clof_106 == 'M':
+#         #     clof_107 = 7
+#         # if clof_106 == 'H':
+#         #     clof_107 = 5
+#         # if clof_106 == 'VH':
+#         #     clof_107 = 3
+#         return Decimal(3)
 

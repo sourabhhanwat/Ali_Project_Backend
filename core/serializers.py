@@ -22,7 +22,6 @@ from .calculators import (
     AdditionalAppurtenanceScoreCalculator,
     FatigueLoadScoreCalculator,
     EnvironmentalConsequenceCategoryCalculator,
-    RiskBasedUnderwaterIntervalScoreCalculator,
     ExposureCategoryLevelCalculator,
     ExposureCategorySurveyLevel1Calculator,
     ExposureCategorySurveyLevel2Calculator,
@@ -31,7 +30,6 @@ from .calculators import (
     CalculateEconomicImpactRemainingLifeServicesCalculator,
     StructureReplacementDecisionCalculator,
     FinalConsequenceCategoryCalculator,
-    RiskRankingCalculator,
     Level1NextInspectionDateCalculator,
     Level2NextInspectionDateCalculator,
     Level3NextInspectionDateCalculator,
@@ -412,9 +410,9 @@ class PlatformSerializer(serializers.ModelSerializer):
     def get_level_3_next_inspection_date(self, obj: Platform):
         return Level3NextInspectionDateCalculator(obj)._calculate()
 
-    @lru_cache(maxsize=1)
-    def get_risk_ranking(self, obj: Platform):
-        return RiskRankingCalculator(obj)._calculate()
+    # @lru_cache(maxsize=1)
+    # def get_risk_ranking(self, obj: Platform):
+    #     return RiskRankingCalculator(obj)._calculate()
 
     @lru_cache(maxsize=1)
     def get_final_consequence_category(self, obj: Platform):

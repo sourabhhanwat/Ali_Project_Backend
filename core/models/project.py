@@ -16,7 +16,7 @@ class ProjectQuerySet(models.QuerySet):
 class Project(models.Model):
     name = models.CharField(max_length=250)
     description = models.CharField(max_length=500, default="", blank=True)
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL, through="ProjectOwnership")
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, through="ProjectOwnership", related_name = 'projectownership')
     start_date = models.DateTimeField(auto_now_add=True,null=True,blank=True)
     end_date = models.DateTimeField(auto_now_add=True,null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

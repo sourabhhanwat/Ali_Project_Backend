@@ -75,10 +75,16 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = "__all__"
 
+class ProjectOwnershipSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField(source='user.id')
+    username = serializers.ReadOnlyField(source='user.username')
+    class Meta:
+        model=ProjectOwnership
+        fields=("id","username",)
 
 class ProjectSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
-
+    users = ProjectOwnershipSerializer(source = 'project_name',many=True)
     class Meta:
         model = Project
         fields = "__all__"
@@ -89,12 +95,6 @@ class SiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Site
         exclude = ("users",)
-
-class ProjectOwnershipSerializer(serializers.ModelSerializer):
-    project = ProjectSerializer()
-    class Meta:
-        model=ProjectOwnership
-        fields=("access_type","project")
 
 class SiteOwnershipSerializer(serializers.ModelSerializer):
     site = SiteSerializer()
@@ -713,6 +713,7 @@ class PlatformSerializer(serializers.ModelSerializer):
 
         return super().update(instance, validated_data)
 
+    project = ProjectSerializer(read_only=True)
     class Meta:
         model = Platform
         exclude = ("users",)

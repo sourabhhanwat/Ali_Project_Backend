@@ -131,6 +131,54 @@ class SaveMarineGrowth(APIView):
         except:
             return Response({"status":False})
 
+class DeletePlatform(APIView):
+    def get(self,request):
+        return Response("Delete platform")
+    def post(self,request):
+        try:
+            data = request.data
+
+            print(data)
+            return Response({"status":True})
+        except:
+            return Response({"status":False})
+
+class DeleteProject(APIView):
+    def get(self,request):
+        return Response("Delete project")
+    def post(self,request):
+        try:
+            data = request.data
+
+            print(data)
+            return Response({"status":True})
+        except:
+            return Response({"status":False})
+
+class UpdateProject(APIView):
+    def get(self,request):
+        return Response("Update project")
+    def post(self,request):
+        try:
+            data = request.data
+
+            print(data)
+            return Response({"status":True})
+        except:
+            return Response({"status":False})
+
+class UpdatePlatform(APIView):
+    def get(self,request):
+        return Response("Update platform")
+    def post(self,request):
+        try:
+            data = request.data
+
+            print(data)
+            return Response({"status":True})
+        except:
+            return Response({"status":False})
+
 class CategoryList(APIView):
     def get(self,request):
         categories = ['A','B','C','D','E']

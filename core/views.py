@@ -137,8 +137,10 @@ class DeletePlatform(APIView):
     def post(self,request):
         try:
             data = request.data
+            platform_id = data.get('platformId')
 
-            print(data)
+            platform = Platform.objects.get(id = platform_id).delete()
+
             return Response({"status":True})
         except:
             return Response({"status":False})
@@ -149,8 +151,10 @@ class DeleteProject(APIView):
     def post(self,request):
         try:
             data = request.data
+            project_id = data.get('projectId')
 
-            print(data)
+            project = Project.objects.get(id = project_id).delete()
+
             return Response({"status":True})
         except:
             return Response({"status":False})
@@ -162,7 +166,7 @@ class UpdateProject(APIView):
         try:
             data = request.data
 
-            print(data)
+            print("update project ",data)
             return Response({"status":True})
         except:
             return Response({"status":False})

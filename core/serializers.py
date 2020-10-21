@@ -713,7 +713,7 @@ class PlatformSerializer(serializers.ModelSerializer):
 
         return super().update(instance, validated_data)
 
-    project = ProjectSerializer(read_only=True)
+    # project = ProjectSerializer(read_only=True)
     class Meta:
         model = Platform
         exclude = ("users",)

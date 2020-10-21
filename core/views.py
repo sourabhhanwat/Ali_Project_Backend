@@ -165,6 +165,25 @@ class UpdateProject(APIView):
     def post(self,request):
         try:
             data = request.data
+            name = data.get('Name')
+            user_id = data.get('Responsible')
+            description = data.get('Description')
+            startdate = data.get('StartDate')
+            enddate = data.get('EndDate')
+            project_id = data.get('projectId')
+
+            project = Project.objects.filter(id = project_id).first()
+            project.name = name
+            project.description = description
+            project.startdate = startdate
+            project.enddate = enddate
+
+            project_owned = ProjectOwnership.objects.filter(project_id = project_id).first()
+            project_owned.user_id = user_id
+
+            project_owned.save()
+
+            project.save()
 
             print("update project ",data)
             return Response({"status":True})
@@ -175,13 +194,31 @@ class UpdatePlatform(APIView):
     def get(self,request):
         return Response("Update platform")
     def post(self,request):
-        try:
-            data = request.data
+        # try:
+        data = request.data
+        name = data.get('Name')
+        description = data.get('Description')
+        startdate = data.get('StartDate')
+        user_id = data.get('Responsible')
+        project_id = data.get('Project')
+        platform_id = data.get('platformId')
+        print("user ",user_id)
 
-            print(data)
-            return Response({"status":True})
-        except:
-            return Response({"status":False})
+        platform = Platform.objects.filter(id = platform_id).first()
+        platform.name = name
+        platform.description = description
+        platform.project_id = project_id
+        
+        platform_owned = PlatformOwnership.objects.filter(platform_id = platform_id).first()
+        platform_owned.user_id = user_id
+
+        platform_owned.save()
+        platform.save()
+
+        print(data)
+        return Response({"status":True})
+        # except:
+        #     return Response({"status":False})
 
 class CategoryList(APIView):
     def get(self,request):

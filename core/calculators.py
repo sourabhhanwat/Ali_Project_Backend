@@ -1251,7 +1251,7 @@ class FinalConsequenceCategoryCalculator:
         try:
             clof_90 = self.instance.platform_manned_status.ranking
         except:
-            clof_90 = 'A'
+            return None
 
         clof_94 = self.instance.environmental_consequence_category
         clof_104 = self.instance.economic_consequence_category
@@ -1284,7 +1284,7 @@ class ExposureCategoryLevelCalculator:
         try:
             clof_90 = self.instance.platform_manned_status.ranking
         except:
-            clof_90 = 'A'
+            return None
         clof_108=None
         if clof_90 == 'E' or clof_90 == 'D':
             clof_108 = 'L-1'

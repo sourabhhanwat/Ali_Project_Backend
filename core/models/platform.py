@@ -699,9 +699,8 @@ class Platform(models.Model):
 
     platform_manned_status = models.ForeignKey(
         PlatformMannedStatus,
-        default = 2,
         on_delete=models.DO_NOTHING,
-        verbose_name="[ILOF-63] platform manned status",
+        verbose_name="[ILOF-63] platform manned status", null=True, blank=True
     )
 
     level_1_selected_inspection_interval_for_next_inspection = models.IntegerField(

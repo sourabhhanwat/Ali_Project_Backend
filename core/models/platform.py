@@ -699,7 +699,7 @@ class Platform(models.Model):
 
     platform_manned_status = models.ForeignKey(
         PlatformMannedStatus,
-        default = 2,
+        default = 3,
         on_delete=models.DO_NOTHING,
         verbose_name="[ILOF-63] platform manned status"
     )

@@ -581,6 +581,7 @@ class PlatformSerializer(serializers.ModelSerializer):
     def get_risk_ranking(self, obj: Platform):
         clof_88 = self.get_lof_ranking(obj)
         clof_105 = FinalConsequenceCategoryCalculator(obj)._calculate()
+        print("clof 105 ",clof_105)
         clof_106 = None
         if clof_105 == "A":
             if clof_88 == 1 or clof_88 == 2:

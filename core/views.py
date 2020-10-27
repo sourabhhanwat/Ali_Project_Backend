@@ -78,33 +78,33 @@ class SavePlatform(APIView):
     def get(self,request):
         return Response('Save Platform')
     def post(self, request):
-        try:
-            data = request.data
-            print(data)
-            name = data.get('Name')
-            description = data.get('Description')
-            startdate = data.get('StartDate')
-            user_id = data.get('Responsible')
-            project_id = data.get('Project')
-            print('name ',name)
-            print('description ',description)
-            platform = Platform(
-                name = name,
-                description = description,
-                project_id = project_id
-            )
-            platform.save()
+        # try:
+        data = request.data
+        print(data)
+        name = data.get('Name')
+        description = data.get('Description')
+        startdate = data.get('StartDate')
+        user_id = data.get('Responsible')
+        project_id = data.get('Project')
+        print('name ',name)
+        print('description ',description)
+        platform = Platform(
+            name = name,
+            description = description,
+            project_id = project_id
+        )
+        platform.save()
 
-            platformowner = PlatformOwnership(
-                platform = platform,
-                user_id = user_id,
-                access_type='M'
-            )
-            platformowner.save()
-            print(data)
-            return Response({"status":True})
-        except:
-            return Response({'status':False})
+        platformowner = PlatformOwnership(
+            platform = platform,
+            user_id = user_id,
+            access_type='M'
+        )
+        platformowner.save()
+        print(data)
+        return Response({"status":True})
+        # except:
+        #     return Response({'status':False})
 
 class SaveMarineGrowth(APIView):
     def get(self,request):

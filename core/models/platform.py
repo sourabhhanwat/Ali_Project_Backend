@@ -460,8 +460,7 @@ class EnvironmentalConsequence(models.Model):
     platform_type = models.ForeignKey(
         PlatformType,
         on_delete=models.DO_NOTHING,
-        default=1,
-        verbose_name="[ILOF-64] platform type",
+        verbose_name="[ILOF-64] platform type",null=True,blank=True,
     )
 
     daily_oil_production = models.IntegerField(
@@ -699,9 +698,8 @@ class Platform(models.Model):
 
     platform_manned_status = models.ForeignKey(
         PlatformMannedStatus,
-        default = 3,
         on_delete=models.DO_NOTHING,
-        verbose_name="[ILOF-63] platform manned status"
+        verbose_name="[ILOF-63] platform manned status",null=True,blank=True
     )
 
     level_1_selected_inspection_interval_for_next_inspection = models.IntegerField(

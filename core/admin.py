@@ -67,7 +67,7 @@ class CustomUserAdmin(UserAdmin):
         (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
         (_("Permissions"), {"fields": ("is_active", "is_staff", "is_superuser"),}),
     )
-    inlines = (ProjectOwnershipInline, SiteOwnershipInline, PlatformOwnershipInline)
+    inlines = (ProjectOwnershipInline, PlatformOwnershipInline)
 
 @admin.register(PlatformMannedStatus)
 class PlatformMannedStatusAdmin(admin.ModelAdmin):

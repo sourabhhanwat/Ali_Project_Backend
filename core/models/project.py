@@ -9,7 +9,7 @@ class ProjectQuerySet(models.QuerySet):
             return self
 
         return self.filter(
-            Q(users=user) | Q(site__users=user) | Q(site__platform__users=user)
+            Q(users=user) | Q(project_platform__users=user)
         ).distinct()
 
 

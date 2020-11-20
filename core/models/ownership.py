@@ -15,6 +15,7 @@ class PlatformOwnership(models.Model):
     access_type = models.CharField(
         max_length=1, choices=AccessType, default='V'
     )
+    delete_access=models.BooleanField()
 
     def __str__(self):
         return f"User {self.user.username} manage Platform {self.platform.name}"
@@ -40,7 +41,8 @@ class ProjectOwnership(models.Model):
     access_type = models.CharField(
         max_length=1, choices=AccessType, default='V'
     )
-
+    create_access=models.BooleanField()
+    delete_access=models.BooleanField()
     def __str__(self):
         return f"User {self.user.username} manage Project {self.project.name}"
 

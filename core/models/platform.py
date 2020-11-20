@@ -153,8 +153,7 @@ class MarineGrowthQuerySet(models.QuerySet):
 
         return self.filter(
             Q(platform__users=user)
-            | Q(platform__site__users=user)
-            | Q(platform__site__project__users=user)
+            | Q(platform__project__users=user)
         ).distinct()
 
 
@@ -578,7 +577,7 @@ class PlatformQuerySet(models.QuerySet):
             return self
 
         return self.filter(
-            Q(users=user) | Q(site__users=user) | Q(site__project__users=user)
+            Q(users=user) | Q(project__users=user)
         ).distinct()
 
 

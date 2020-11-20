@@ -66,7 +66,9 @@ class SaveProject(APIView):
             projectowner = ProjectOwnership(
                 project=project,
                 user_id=user_id,
-                access_type='M'
+                access_type='M',
+                create_access=True,
+                delete_access=True,
             )
             projectowner.save()
             print(name)
@@ -78,56 +80,102 @@ class SavePlatform(APIView):
     def get(self,request):
         return Response('Save Platform')
     def post(self, request):
-        # try:
-        data = request.data
-        print(data)
-        name = data.get('Name')
-        description = data.get('Description')
-        startdate = data.get('StartDate')
-        user_id = data.get('Responsible')
-        project_id = data.get('Project')
-        print('name ',name)
-        print('description ',description)
-        platform = Platform(
-            name = name,
-            description = description,
-            project_id = project_id
-        )
-        platform.save()
+        try:
+            user = request.user
+    
+            data = request.data
+            name = data.get('Name')
+            description = data.get('Description')
+            startdate = data.get('StartDate')
+            user_id = data.get('Responsible')
+            project_id = data.get('Project')
+            if user.is_superuser==True:
+                platform = Platform(
+                    name = name, 
+                    description = description,
+                    project_id = project_id
+                )
+                platform.save()
 
-        platformowner = PlatformOwnership(
-            platform = platform,
-            user_id = user_id,
-            access_type='M'
-        )
-        platformowner.save()
-        print(data)
-        return Response({"status":True})
-        # except:
-        #     return Response({'status':False})
+                platformowner = PlatformOwnership(
+                    platform = platform,
+                    user_id = user_id,
+                    access_type='M',
+                    delete_access=True,
+                )
+                platformowner.save()
+                return Response({"status":True})
+                           
+            user_ownership = ProjectOwnership.objects.filter(user=user, project_id=project_id).first()
+            if user_ownership:
+                if user_ownership.create_access == True:
+
+                    platform = Platform(
+                        name = name, 
+                        description = description,
+                        project_id = project_id
+                    )
+                    platform.save()
+
+                    platformowner = PlatformOwnership(
+                        platform = platform,
+                        user_id = user_id,
+                        access_type='M',
+                        delete_access=True,
+                    )
+                    platformowner.save()
+                    return Response({"status":True})
+            
+            return Response({"status":False})
+
+        except:
+            return Response({'status':False})
 
 class SaveMarineGrowth(APIView):
     def get(self,request):
         return Response("save Marine growth")
     def post(self,request):
         try:
+            user = request.user
             data = request.data
-            mg_depths_from_el = data.get('marine_growth_depths_from_el')
-            mg_depths_to_el = data.get('marine_growth_depths_to_el')
-            mg_design_thickness = data.get('marine_growth_design_thickness')
-            mg_inspected_thickness = data.get('marine_growth_inspected_thickness')
             platform_id = data.get('platform_id')
-            mg = MarineGrowth(
-                marine_growth_depths_from_el = mg_depths_from_el,
-                marine_growth_depths_to_el = mg_depths_to_el,
-                marine_growth_inspected_thickness = mg_inspected_thickness,
-                marine_growth_design_thickness = mg_design_thickness,
-                platform_id = platform_id
-            )
-            mg.save()
+            if user.is_superuser==True:
+                mg_depths_from_el = data.get('marine_growth_depths_from_el')
+                mg_depths_to_el = data.get('marine_growth_depths_to_el')
+                mg_design_thickness = data.get('marine_growth_design_thickness')
+                mg_inspected_thickness = data.get('marine_growth_inspected_thickness')
+                platform_id = data.get('platform_id')
+                mg = MarineGrowth(
+                    marine_growth_depths_from_el = mg_depths_from_el,
+                    marine_growth_depths_to_el = mg_depths_to_el,
+                    marine_growth_inspected_thickness = mg_inspected_thickness,
+                    marine_growth_design_thickness = mg_design_thickness,
+                    platform_id = platform_id
+                )
+                mg.save()
 
-            print(data)
-            return Response({"status":True})
+                return Response({"status":True})
+
+            user_ownership = PlatformOwnership.objects.filter(user=user, platform_id = platform_id).first()
+            if user_ownership:
+                if user_ownership.access_type == 'M':
+                    mg_depths_from_el = data.get('marine_growth_depths_from_el')
+                    mg_depths_to_el = data.get('marine_growth_depths_to_el')
+                    mg_design_thickness = data.get('marine_growth_design_thickness')
+                    mg_inspected_thickness = data.get('marine_growth_inspected_thickness')
+                    platform_id = data.get('platform_id')
+                    mg = MarineGrowth(
+                        marine_growth_depths_from_el = mg_depths_from_el,
+                        marine_growth_depths_to_el = mg_depths_to_el,
+                        marine_growth_inspected_thickness = mg_inspected_thickness,
+                        marine_growth_design_thickness = mg_design_thickness,
+                        platform_id = platform_id
+                    )
+                    mg.save()
+
+                    print(data)
+                    return Response({"status":True})
+            return Response({"status":False})
         except:
             return Response({"status":False})
 
@@ -136,12 +184,21 @@ class DeletePlatform(APIView):
         return Response("Delete platform")
     def post(self,request):
         try:
+            user = request.user
             data = request.data
             platform_id = data.get('platformId')
+            if user.is_superuser==True:
+                platform = Platform.objects.get(id = platform_id).delete()
 
-            platform = Platform.objects.get(id = platform_id).delete()
+                return Response({"status":True})   
 
-            return Response({"status":True})
+            user_ownership = PlatformOwnership.objects.filter(user=user, platform_id = platform_id).first()
+            if user_ownership:
+                if user_ownership.delete_access==True:
+                    platform = Platform.objects.get(id = platform_id).delete()
+
+                    return Response({"status":True})
+            return Response({"status":False})
         except:
             return Response({"status":False})
 
@@ -150,12 +207,22 @@ class DeleteProject(APIView):
         return Response("Delete project")
     def post(self,request):
         try:
+            user = request.user
             data = request.data
             project_id = data.get('projectId')
+            if user.is_superuser==True:
+                project = Project.objects.get(id = project_id).delete()
 
-            project = Project.objects.get(id = project_id).delete()
+                return Response({"status":True})          
+            
+            user_ownership = ProjectOwnership.objects.filter(user=user, project_id=project_id).first()
+            if user_ownership:
+                if user_ownership.delete_access==True:
+                    project = Project.objects.get(id = project_id).delete()
 
-            return Response({"status":True})
+                    return Response({"status":True})
+
+            return Response({"status":False})
         except:
             return Response({"status":False})
 
@@ -164,6 +231,7 @@ class UpdateProject(APIView):
         return Response("Update project")
     def post(self,request):
         try:
+            user=request.user
             data = request.data
             name = data.get('Name')
             user_id = data.get('Responsible')
@@ -171,22 +239,41 @@ class UpdateProject(APIView):
             startdate = data.get('StartDate')
             enddate = data.get('EndDate')
             project_id = data.get('projectId')
+            if user.is_superuser==True:
+                project = Project.objects.filter(id = project_id).first()
+                project.name = name
+                project.description = description
+                project.startdate = startdate
+                project.enddate = enddate
 
-            project = Project.objects.filter(id = project_id).first()
-            project.name = name
-            project.description = description
-            project.startdate = startdate
-            project.enddate = enddate
+                project_owned = ProjectOwnership.objects.filter(project_id = project_id).first()
+                project_owned.user_id = user_id
 
-            project_owned = ProjectOwnership.objects.filter(project_id = project_id).first()
-            project_owned.user_id = user_id
+                project_owned.save()
 
-            project_owned.save()
+                project.save()
 
-            project.save()
+                return Response({"status":True})
+            
+            user_ownership = ProjectOwnership.objects.filter(user=user, project_id=project_id).first()
+            if user_ownership:
+                if user_ownership.access_type=='M':
+                    project = Project.objects.filter(id = project_id).first()
+                    project.name = name
+                    project.description = description
+                    project.startdate = startdate
+                    project.enddate = enddate
 
-            print("update project ",data)
-            return Response({"status":True})
+                    project_owned = ProjectOwnership.objects.filter(project_id = project_id).first()
+                    project_owned.user_id = user_id
+
+                    project_owned.save()
+
+                    project.save()
+
+
+                    return Response({"status":True})
+            return Response({"status":False})
         except:
             return Response({"status":False})
 
@@ -194,31 +281,49 @@ class UpdatePlatform(APIView):
     def get(self,request):
         return Response("Update platform")
     def post(self,request):
-        # try:
-        data = request.data
-        name = data.get('Name')
-        description = data.get('Description')
-        startdate = data.get('StartDate')
-        user_id = data.get('Responsible')
-        project_id = data.get('Project')
-        platform_id = data.get('platformId')
-        print("user ",user_id)
+        try:
+            user=request.user
+            data = request.data
+            name = data.get('Name')
+            description = data.get('Description')
+            startdate = data.get('StartDate')
+            user_id = data.get('Responsible')
+            project_id = data.get('Project')
+            platform_id = data.get('platformId')
 
-        platform = Platform.objects.filter(id = platform_id).first()
-        platform.name = name
-        platform.description = description
-        platform.project_id = project_id
-        
-        platform_owned = PlatformOwnership.objects.filter(platform_id = platform_id).first()
-        platform_owned.user_id = user_id
+            if user.is_superuser==True:
+                platform = Platform.objects.filter(id = platform_id).first()
+                platform.name = name
+                platform.description = description
+                platform.project_id = project_id
+                
+                platform_owned = PlatformOwnership.objects.filter(platform_id = platform_id).first()
+                platform_owned.user_id = user_id
 
-        platform_owned.save()
-        platform.save()
+                platform_owned.save()
+                platform.save()
 
-        print(data)
-        return Response({"status":True})
-        # except:
-        #     return Response({"status":False})
+                return Response({"status":True})
+
+            user_ownership = PlatformOwnership.objects.filter(user=user, platform_id = platform_id).first()
+            if user_ownership:
+                if user_ownership.access_type == 'M':
+
+                    platform = Platform.objects.filter(id = platform_id).first()
+                    platform.name = name
+                    platform.description = description
+                    platform.project_id = project_id
+                    
+                    platform_owned = PlatformOwnership.objects.filter(platform_id = platform_id).first()
+                    platform_owned.user_id = user_id
+
+                    platform_owned.save()
+                    platform.save()
+
+                    return Response({"status":True})
+            return Response({"status":False})
+        except:
+            return Response({"status":False})
 
 class CategoryList(APIView):
     def get(self,request):
@@ -251,6 +356,7 @@ class OwnedResourceFilter(filters.BaseFilterBackend):
 class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
+    print(queryset)
     filter_backends = [OwnedResourceFilter, DjangoFilterBackend]
 
 
@@ -276,6 +382,8 @@ class PlatformViewSet(
     queryset = Platform.objects.all()
     filter_backends = [OwnedResourceFilter, DjangoFilterBackend]
     filterset_class = PlatformFilter
+    print(filter_backends)
+    print(queryset)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)

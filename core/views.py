@@ -356,7 +356,6 @@ class OwnedResourceFilter(filters.BaseFilterBackend):
 class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
-    print(queryset)
     filter_backends = [OwnedResourceFilter, DjangoFilterBackend]
 
 
@@ -382,8 +381,6 @@ class PlatformViewSet(
     queryset = Platform.objects.all()
     filter_backends = [OwnedResourceFilter, DjangoFilterBackend]
     filterset_class = PlatformFilter
-    print(filter_backends)
-    print(queryset)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)

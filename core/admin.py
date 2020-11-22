@@ -21,12 +21,18 @@ from .models import (
 logger = logging.getLogger("core.admin")
 
 
+class ProjectOwnershipInline(admin.TabularInline):
+    model = ProjectOwnership
+    extra = 1
+
+
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     inlines = (ProjectOwnershipInline,)
 
-class ProjectOwnershipInline(admin.TabularInline):
-    model = ProjectOwnership
+
+class SiteOwnershipInline(admin.TabularInline):
+    model = SiteOwnership
     extra = 1
 
 
@@ -38,8 +44,9 @@ class SiteAdmin(admin.ModelAdmin):
     def project_name(self, obj):
         return obj.project.name
 
-class SiteOwnershipInline(admin.TabularInline):
-    model = SiteOwnership
+
+class PlatformOwnershipInline(admin.TabularInline):
+    model = PlatformOwnership
     extra = 1
 
 
@@ -52,9 +59,6 @@ class PlatformAdmin(admin.ModelAdmin):
     def project_name(self, obj):
         return obj.project.name
 
-class PlatformOwnershipInline(admin.TabularInline):
-    model = PlatformOwnership
-    extra = 1
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):

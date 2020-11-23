@@ -270,7 +270,10 @@ class PlatformSerializer(serializers.ModelSerializer):
 
     platform_vintage_score = serializers.SerializerMethodField(read_only=True)
 
-    access_type = serializers.SerializerMethodField(read_only=True)
+    # access_type = serializers.SerializerMethodField(read_only=True)
+    view_access = serializers.SerializerMethodField(read_only=True)
+
+    modify_access = serializers.SerializerMethodField(read_only=True)
 
     platform_legs_and_bracing_score = serializers.SerializerMethodField(read_only=True)
 
@@ -510,18 +513,35 @@ class PlatformSerializer(serializers.ModelSerializer):
     def get_fatigue_load_score(self, obj: Platform):
         return FatigueLoadScoreCalculator(obj).calculate()
 
+    # @lru_cache(maxsize=1)
+    # def get_access_type(self, obj: Platform):
+    #     request = self.context.get("request")
+
+    #     if request.user.is_superuser:
+    #         return "M"
+
+    #     return (
+    #         Platform.objects.filter(pk=obj.id)
+    #         .with_access_type(user=request.user)[0]
+    #         .access_type
+    #     )
     @lru_cache(maxsize=1)
-    def get_access_type(self, obj: Platform):
+    def get_view_access(self, obj: Platform):
         request = self.context.get("request")
-
         if request.user.is_superuser:
-            return "M"
-
-        return (
-            Platform.objects.filter(pk=obj.id)
-            .with_access_type(user=request.user)[0]
-            .access_type
-        )
+            return True
+        
+        platform = PlatformOwnership.objects.filter(pk=obj.id, user=request.user).first()
+        return platform.view_access
+    
+    @lru_cache(maxsize=1)
+    def get_modify_access(self, obj: Platform):
+        request = self.context.get("request")
+        if request.user.is_superuser:
+            return True
+        
+        platform = PlatformOwnership.objects.filter(pk=obj.id, user=request.user).first()
+        return platform.modify_access
 
     @lru_cache(maxsize=1)
     def get_robustness_score(self, obj: Platform):
@@ -728,4 +748,4 @@ class PlatformOwnershipSerializer(serializers.ModelSerializer):
     platform = PlatformNormalSerializer()
     class Meta:
         model=PlatformOwnership
-        fields=("access_type","platform")
+        fields=("view_access","modify_access","platform")

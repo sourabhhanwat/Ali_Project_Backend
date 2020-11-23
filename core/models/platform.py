@@ -554,23 +554,23 @@ class EconomicImpactConsequence(models.Model):
 
 
 class PlatformQuerySet(models.QuerySet):
-    def with_access_type(self, user: settings.AUTH_USER_MODEL):
-        platform_ownership = PlatformOwnership.objects.filter(
-            Q(user=user) & Q(platform=OuterRef("pk"))
-        )
-        site_ownership = SiteOwnership.objects.filter(
-            Q(user=user) & Q(site__platform=OuterRef("pk"))
-        )
-        project_ownership = ProjectOwnership.objects.filter(
-            Q(user=user) & Q(project__site__platform=OuterRef("pk"))
-        )
-        return self.annotate(
-            access_type=Coalesce(
-                Subquery(platform_ownership.values("access_type")[:1]),
-                Subquery(site_ownership.values("access_type")[:1]),
-                Subquery(project_ownership.values("access_type")[:1]),
-            ),
-        )
+    # def with_access_type(self, user: settings.AUTH_USER_MODEL):
+    #     platform_ownership = PlatformOwnership.objects.filter(
+    #         Q(user=user) & Q(platform=OuterRef("pk"))
+    #     )
+    #     site_ownership = SiteOwnership.objects.filter(
+    #         Q(user=user) & Q(site__platform=OuterRef("pk"))
+    #     )
+    #     project_ownership = ProjectOwnership.objects.filter(
+    #         Q(user=user) & Q(project__site__platform=OuterRef("pk"))
+    #     )
+    #     return self.annotate(
+    #         access_type=Coalesce(
+    #             Subquery(platform_ownership.values("access_type")[:1]),
+    #             Subquery(site_ownership.values("access_type")[:1]),
+    #             Subquery(project_ownership.values("access_type")[:1]),
+    #         ),
+    #     )
 
     def has_ownership(self, user: settings.AUTH_USER_MODEL):
         if user.is_superuser:

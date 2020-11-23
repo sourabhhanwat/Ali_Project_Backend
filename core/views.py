@@ -66,8 +66,8 @@ class SaveProject(APIView):
             projectowner = ProjectOwnership(
                 project=project,
                 user_id=user_id,
-                access_type='M',
-                create_access=True,
+                view_access=True,
+                platform_create_access=True,
                 delete_access=True,
             )
             projectowner.save()
@@ -82,8 +82,10 @@ class SavePlatform(APIView):
     def post(self, request):
         try:
             user = request.user
-    
+            print("User ",user)
+
             data = request.data
+            print(data)
             name = data.get('Name')
             description = data.get('Description')
             startdate = data.get('StartDate')
@@ -100,15 +102,14 @@ class SavePlatform(APIView):
                 platformowner = PlatformOwnership(
                     platform = platform,
                     user_id = user_id,
-                    access_type='M',
-                    delete_access=True,
+                    view_access=True,
                 )
                 platformowner.save()
                 return Response({"status":True})
-                           
+                            
             user_ownership = ProjectOwnership.objects.filter(user=user, project_id=project_id).first()
             if user_ownership:
-                if user_ownership.create_access == True:
+                if user_ownership.platform_create_access == True:
 
                     platform = Platform(
                         name = name, 
@@ -120,12 +121,9 @@ class SavePlatform(APIView):
                     platformowner = PlatformOwnership(
                         platform = platform,
                         user_id = user_id,
-                        access_type='M',
-                        delete_access=True,
                     )
                     platformowner.save()
                     return Response({"status":True})
-            
             return Response({"status":False})
 
         except:
@@ -158,7 +156,7 @@ class SaveMarineGrowth(APIView):
 
             user_ownership = PlatformOwnership.objects.filter(user=user, platform_id = platform_id).first()
             if user_ownership:
-                if user_ownership.access_type == 'M':
+                if user_ownership.modify_access == True:
                     mg_depths_from_el = data.get('marine_growth_depths_from_el')
                     mg_depths_to_el = data.get('marine_growth_depths_to_el')
                     mg_design_thickness = data.get('marine_growth_design_thickness')
@@ -257,7 +255,7 @@ class UpdateProject(APIView):
             
             user_ownership = ProjectOwnership.objects.filter(user=user, project_id=project_id).first()
             if user_ownership:
-                if user_ownership.access_type=='M':
+                if user_ownership.modify_access==True:
                     project = Project.objects.filter(id = project_id).first()
                     project.name = name
                     project.description = description
@@ -307,7 +305,7 @@ class UpdatePlatform(APIView):
 
             user_ownership = PlatformOwnership.objects.filter(user=user, platform_id = platform_id).first()
             if user_ownership:
-                if user_ownership.access_type == 'M':
+                if user_ownership.modify_access == True:
 
                     platform = Platform.objects.filter(id = platform_id).first()
                     platform.name = name
@@ -389,11 +387,15 @@ class PlatformViewSet(
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
 
+        # if not request.user.is_superuser:
+        #     platform = Platform.objects.filter(pk=instance.id).with_access_type(
+        #         user=request.user
+        #     )[0]
+        #     if platform.access_type != "M":
+        #         raise exceptions.PermissionDenied()
         if not request.user.is_superuser:
-            platform = Platform.objects.filter(pk=instance.id).with_access_type(
-                user=request.user
-            )[0]
-            if platform.access_type != "M":
+            platform = PlatformOwnership.objects.filter(pk=instance.id, user=request.user).first()
+            if platform.modify_access != True:
                 raise exceptions.PermissionDenied()
 
         self.perform_update(serializer)

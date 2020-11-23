@@ -12,10 +12,9 @@ class PlatformOwnership(models.Model):
         ('M', 'Modify'),
     ]
 
-    access_type = models.CharField(
-        max_length=1, choices=AccessType, default='V'
-    )
-    delete_access=models.BooleanField()
+    modify_access = models.BooleanField(default=False)
+    view_access = models.BooleanField(default=True)
+    delete_access=models.BooleanField(default=False)
 
     def __str__(self):
         return f"User {self.user.username} manage Platform {self.platform.name}"
@@ -38,11 +37,10 @@ class ProjectOwnership(models.Model):
         ('M', 'Modify'),
     ]
 
-    access_type = models.CharField(
-        max_length=1, choices=AccessType, default='V'
-    )
-    create_access=models.BooleanField()
-    delete_access=models.BooleanField()
+    modify_access = models.BooleanField(default=False)
+    view_access = models.BooleanField(default=True)
+    platform_create_access=models.BooleanField(default=False)
+    delete_access=models.BooleanField(default=False)
     def __str__(self):
         return f"User {self.user.username} manage Project {self.project.name}"
 

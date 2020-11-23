@@ -65,7 +65,7 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {"fields": ("username", "password")}),
         (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
-        (_("Permissions"), {"fields": ("is_active", "is_staff", "is_superuser"),}),
+        (_("Permissions"), {"fields": ("is_active", "is_staff", "is_superuser","project_create_access"),}),
     )
     inlines = (ProjectOwnershipInline, PlatformOwnershipInline)
 

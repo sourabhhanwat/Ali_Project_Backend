@@ -6,8 +6,7 @@ class User(AbstractUser):
     """
     https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#using-a-custom-user-model-when-starting-a-project
     """
-
-    pass
+    project_create_access=models.BooleanField(default=False)
 
 
 class PlatformType(models.Model):

@@ -532,7 +532,9 @@ class PlatformSerializer(serializers.ModelSerializer):
             return True
         
         platform = PlatformOwnership.objects.filter(pk=obj.id, user=request.user).first()
-        return platform.view_access
+        if platform:
+            return platform.view_access
+        return False
     
     @lru_cache(maxsize=1)
     def get_modify_access(self, obj: Platform):

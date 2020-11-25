@@ -543,7 +543,9 @@ class PlatformSerializer(serializers.ModelSerializer):
             return True
         
         platform = PlatformOwnership.objects.filter(pk=obj.id, user=request.user).first()
-        return platform.modify_access
+        if platform:
+            return platform.modify_access
+        return False
 
     @lru_cache(maxsize=1)
     def get_robustness_score(self, obj: Platform):

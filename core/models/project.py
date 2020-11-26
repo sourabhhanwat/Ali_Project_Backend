@@ -8,8 +8,11 @@ class ProjectQuerySet(models.QuerySet):
         if user.is_superuser:
             return self
 
+        # return self.filter(
+        #     Q(users=user) | Q(project_platform__users=user)
+        # ).distinct()
         return self.filter(
-            Q(users=user) | Q(project_platform__users=user)
+            Q(users=user) 
         ).distinct()
 
 

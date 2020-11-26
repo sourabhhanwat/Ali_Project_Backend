@@ -14,6 +14,9 @@ class PlatformOwnership(models.Model):
 
     modify_access = models.BooleanField(default=False)
     view_access = models.BooleanField(default=True)
+    # access_type = models.CharField(
+    #     max_length=1, choices=AccessType, default='V'
+    # )
     delete_access=models.BooleanField(default=False)
 
     def __str__(self):
@@ -39,6 +42,9 @@ class ProjectOwnership(models.Model):
 
     modify_access = models.BooleanField(default=False)
     view_access = models.BooleanField(default=True)
+    # access_type = models.CharField(
+    #     max_length=1, choices=AccessType, default='V'
+    # )
     platform_create_access=models.BooleanField(default=False)
     delete_access=models.BooleanField(default=False)
     def __str__(self):

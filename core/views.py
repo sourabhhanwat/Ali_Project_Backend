@@ -50,29 +50,33 @@ class SaveProject(APIView):
     def post(self,request):
         try:
             data=request.data
-            print(data)
-            name = data.get('Name')
-            user_id = data.get('Responsible')
-            description = data.get('Description')
-            startdate = data.get('StartDate')
-            enddate = data.get('EndDate')
-            project = Project(
-                name=name,
-                description=description,
-                start_date=startdate,
-                end_date=enddate,
-            )
-            project.save()
-            projectowner = ProjectOwnership(
-                project=project,
-                user_id=user_id,
-                view_access=True,
-                platform_create_access=True,
-                delete_access=True,
-            )
-            projectowner.save()
-            print(name)
-            return Response({"status":True})
+            user = request.user
+
+            if user.project_create_access == True or user.is_superuser==True:
+                name = data.get('Name')
+                user_id = data.get('Responsible')
+                description = data.get('Description')
+                startdate = data.get('StartDate')
+                enddate = data.get('EndDate')
+                project = Project(
+                    name=name,
+                    description=description,
+                    start_date=startdate,
+                    end_date=enddate,
+                )
+                project.save()
+                projectowner = ProjectOwnership(
+                    project=project,
+                    user_id=user_id,
+                    view_access=True,
+                    platform_create_access=True,
+                    delete_access=True,
+                )
+                projectowner.save()
+                print(name)
+                return Response({"status":True})
+                
+            return Response({"status":False})
         except:
             return Response({'status':False})
         
@@ -393,6 +397,7 @@ class PlatformViewSet(
         #     )[0]
         #     if platform.access_type != "M":
         #         raise exceptions.PermissionDenied()
+        # print("user 1 ",request.user)
         if not request.user.is_superuser:
             platform = PlatformOwnership.objects.filter(pk=instance.id, user=request.user).first()
             if platform.modify_access != True:

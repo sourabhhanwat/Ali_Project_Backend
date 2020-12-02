@@ -69,9 +69,9 @@ class CustomUserAdmin(UserAdmin):
     )
     inlines = (ProjectOwnershipInline, PlatformOwnershipInline)
 
-# @admin.register(PlatformMannedStatus)
-# class PlatformMannedStatusAdmin(admin.ModelAdmin):
-#     list_display=('name','ranking','description')
+@admin.register(PlatformMannedStatus)
+class PlatformMannedStatusAdmin(admin.ModelAdmin):
+    list_display=('name','ranking','description')
 
 # @admin.register(EconomicImpactConsequence)
 # class EconomicImpactConsequenceAdmin(admin.ModelAdmin):

@@ -399,6 +399,7 @@ class PlatformViewSet(
         #         raise exceptions.PermissionDenied()
         # print("user 1 ",request.user)
         if not request.user.is_superuser:
+            print('aman')
             platform = PlatformOwnership.objects.filter(pk=instance.id, user=request.user).first()
             if platform.modify_access != True:
                 raise exceptions.PermissionDenied()

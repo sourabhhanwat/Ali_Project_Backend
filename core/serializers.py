@@ -706,6 +706,7 @@ class PlatformSerializer(serializers.ModelSerializer):
         DeckLoad.objects.filter(platform=instance).update(**deck_load)
 
         deck_elevation_wave_in_deck = validated_data.pop("deck_elevation_wave_in_deck")
+        print("deck_elevation_wave_in_deck ",deck_elevation_wave_in_deck)
         DeckElevationWaveInDeck.objects.filter(platform=instance).update(
             **deck_elevation_wave_in_deck
         )

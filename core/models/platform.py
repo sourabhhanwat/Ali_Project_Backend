@@ -358,34 +358,34 @@ class DeckElevationWaveInDeck(models.Model):
         related_name="deck_elevation_wave_in_deck",
     )
 
-    # class Meta:
-    #     constraints = (
-    #         CheckConstraint(
-    #             check=(
-    #                           Q(cellar_deck_height__isnull=True)
-    #                           & Q(maximum_wave_height_10_years__isnull=True)
-    #                           & Q(storm_surge_10_years__isnull=True)
-    #                           & Q(maximum_wave_height_100_years__isnull=True)
-    #                           & Q(storm_surge_100_years__isnull=True)
-    #                           & Q(maximum_wave_height_10000_years__isnull=True)
-    #                           & Q(storm_surge_10000_years__isnull=True)
-    #                           & Q(highest_astronomical_tide__isnull=True)
-    #                           & Q(crest_height_factor__isnull=True)
-    #                   )
-    #                   | (
-    #                           Q(cellar_deck_height__isnull=False)
-    #                           & Q(maximum_wave_height_10_years__isnull=False)
-    #                           & Q(storm_surge_10_years__isnull=False)
-    #                           & Q(maximum_wave_height_100_years__isnull=False)
-    #                           & Q(storm_surge_100_years__isnull=False)
-    #                           & Q(maximum_wave_height_10000_years__isnull=False)
-    #                           & Q(storm_surge_10000_years__isnull=False)
-    #                           & Q(highest_astronomical_tide__isnull=False)
-    #                           & Q(crest_height_factor__isnull=False)
-    #                   ),
-    #             name="deck_elevation_wave_in_deck_check",
-    #         ),
-    #     )
+    class Meta:
+        constraints = (
+            CheckConstraint(
+                check=(
+                              Q(cellar_deck_height__isnull=True)
+                              & Q(maximum_wave_height_10_years__isnull=True)
+                              & Q(storm_surge_10_years__isnull=True)
+                              & Q(maximum_wave_height_100_years__isnull=True)
+                              & Q(storm_surge_100_years__isnull=True)
+                              & Q(maximum_wave_height_10000_years__isnull=True)
+                              & Q(storm_surge_10000_years__isnull=True)
+                              & Q(highest_astronomical_tide__isnull=True)
+                              & Q(crest_height_factor__isnull=True)
+                      )
+                      | (
+                              Q(cellar_deck_height__isnull=False)
+                              & Q(maximum_wave_height_10_years__isnull=False)
+                              & Q(storm_surge_10_years__isnull=False)
+                              & Q(maximum_wave_height_100_years__isnull=False)
+                              & Q(storm_surge_100_years__isnull=False)
+                              & Q(maximum_wave_height_10000_years__isnull=False)
+                              & Q(storm_surge_10000_years__isnull=False)
+                              & Q(highest_astronomical_tide__isnull=False)
+                              & Q(crest_height_factor__isnull=False)
+                      ),
+                name="deck_elevation_wave_in_deck_check",
+            ),
+        )
 
 
 class AdditionalAppurtenance(models.Model):

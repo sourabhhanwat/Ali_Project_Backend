@@ -289,6 +289,7 @@ class DeckElevationWaveInDeck(models.Model):
         blank=True,
         max_digits=10,
         decimal_places=5,
+        default=0,
         verbose_name="[ILOF-48] cellar deck height (m)",
     )
 
@@ -297,6 +298,7 @@ class DeckElevationWaveInDeck(models.Model):
         blank=True,
         max_digits=10,
         decimal_places=5,
+        default=0,
         verbose_name="[ILOF-49] maximum wave height (m) - 10 years",
     )
 
@@ -305,6 +307,7 @@ class DeckElevationWaveInDeck(models.Model):
         blank=True,
         max_digits=10,
         decimal_places=5,
+        default=0,
         verbose_name="[ILOF-50] storm surge (m) - 10 years",
     )
 
@@ -313,6 +316,7 @@ class DeckElevationWaveInDeck(models.Model):
         blank=True,
         max_digits=10,
         decimal_places=5,
+        default=0,
         verbose_name="[ILOF-49] maximum wave height (m) - 100 years",
     )
 
@@ -321,6 +325,7 @@ class DeckElevationWaveInDeck(models.Model):
         blank=True,
         max_digits=10,
         decimal_places=5,
+        default=0,
         verbose_name="[ILOF-50] storm surge (m) - 100 years",
     )
 
@@ -329,6 +334,7 @@ class DeckElevationWaveInDeck(models.Model):
         blank=True,
         max_digits=10,
         decimal_places=5,
+        default=0,
         verbose_name="[ILOF-49] maximum wave height (m) - 10,000 years",
     )
 
@@ -337,6 +343,7 @@ class DeckElevationWaveInDeck(models.Model):
         blank=True,
         max_digits=10,
         decimal_places=5,
+        default=0,
         verbose_name="[ILOF-50] storm surge (m) - 10,000 years",
     )
 
@@ -345,11 +352,12 @@ class DeckElevationWaveInDeck(models.Model):
         blank=True,
         max_digits=10,
         decimal_places=5,
+        default=0,
         verbose_name="[ILOF-51] highest astronomical height (m)",
     )
 
     crest_height_factor = models.IntegerField(
-        null=True, blank=True, verbose_name="[ILOF-52] crest height factor"
+        null=True, blank=True, default=0, verbose_name="[ILOF-52] crest height factor"
     )
 
     platform = models.OneToOneField(
@@ -358,34 +366,34 @@ class DeckElevationWaveInDeck(models.Model):
         related_name="deck_elevation_wave_in_deck",
     )
 
-    class Meta:
-        constraints = (
-            CheckConstraint(
-                check=(
-                              Q(cellar_deck_height__isnull=True)
-                              & Q(maximum_wave_height_10_years__isnull=True)
-                              & Q(storm_surge_10_years__isnull=True)
-                              & Q(maximum_wave_height_100_years__isnull=True)
-                              & Q(storm_surge_100_years__isnull=True)
-                              & Q(maximum_wave_height_10000_years__isnull=True)
-                              & Q(storm_surge_10000_years__isnull=True)
-                              & Q(highest_astronomical_tide__isnull=True)
-                              & Q(crest_height_factor__isnull=True)
-                      )
-                      | (
-                              Q(cellar_deck_height__isnull=False)
-                              & Q(maximum_wave_height_10_years__isnull=False)
-                              & Q(storm_surge_10_years__isnull=False)
-                              & Q(maximum_wave_height_100_years__isnull=False)
-                              & Q(storm_surge_100_years__isnull=False)
-                              & Q(maximum_wave_height_10000_years__isnull=False)
-                              & Q(storm_surge_10000_years__isnull=False)
-                              & Q(highest_astronomical_tide__isnull=False)
-                              & Q(crest_height_factor__isnull=False)
-                      ),
-                name="deck_elevation_wave_in_deck_check",
-            ),
-        )
+    # class Meta:
+    #     constraints = (
+    #         CheckConstraint(
+    #             check=(
+    #                           Q(cellar_deck_height__isnull=True)
+    #                           & Q(maximum_wave_height_10_years__isnull=True)
+    #                           & Q(storm_surge_10_years__isnull=True)
+    #                           & Q(maximum_wave_height_100_years__isnull=True)
+    #                           & Q(storm_surge_100_years__isnull=True)
+    #                           & Q(maximum_wave_height_10000_years__isnull=True)
+    #                           & Q(storm_surge_10000_years__isnull=True)
+    #                           & Q(highest_astronomical_tide__isnull=True)
+    #                           & Q(crest_height_factor__isnull=True)
+    #                   )
+    #                   | (
+    #                           Q(cellar_deck_height__isnull=False)
+    #                           & Q(maximum_wave_height_10_years__isnull=False)
+    #                           & Q(storm_surge_10_years__isnull=False)
+    #                           & Q(maximum_wave_height_100_years__isnull=False)
+    #                           & Q(storm_surge_100_years__isnull=False)
+    #                           & Q(maximum_wave_height_10000_years__isnull=False)
+    #                           & Q(storm_surge_10000_years__isnull=False)
+    #                           & Q(highest_astronomical_tide__isnull=False)
+    #                           & Q(crest_height_factor__isnull=False)
+    #                   ),
+    #             name="deck_elevation_wave_in_deck_check",
+    #         ),
+    #     )
 
 
 class AdditionalAppurtenance(models.Model):
@@ -458,6 +466,7 @@ class ReserveStrengthRatioScore(models.Model):
 class EnvironmentalConsequence(models.Model):
     platform_type = models.ForeignKey(
         PlatformType,
+        default = 2,
         on_delete=models.DO_NOTHING,
         verbose_name="[ILOF-64] platform type",null=True,blank=True,
     )
@@ -697,6 +706,7 @@ class Platform(models.Model):
 
     platform_manned_status = models.ForeignKey(
         PlatformMannedStatus,
+        default = 5,
         on_delete=models.DO_NOTHING,
         verbose_name="[ILOF-63] platform manned status",null=True,blank=True
     )

@@ -16,6 +16,7 @@ from .models import (
     PlatformMannedStatus,
     EconomicImpactConsequence,
     EnvironmentalConsequence,
+    PlatformType
 )
 
 logger = logging.getLogger("core.admin")
@@ -72,6 +73,10 @@ class CustomUserAdmin(UserAdmin):
 @admin.register(PlatformMannedStatus)
 class PlatformMannedStatusAdmin(admin.ModelAdmin):
     list_display=('name','ranking','description')
+
+@admin.register(PlatformType)
+class PlatformTypeAdmin(admin.ModelAdmin):
+    list_display=('id','name')
 
 # @admin.register(EconomicImpactConsequence)
 # class EconomicImpactConsequenceAdmin(admin.ModelAdmin):

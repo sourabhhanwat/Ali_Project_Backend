@@ -73,7 +73,6 @@ class SaveProject(APIView):
                     delete_access=True,
                 )
                 projectowner.save()
-                print(name)
                 return Response({"status":True})
                 
             return Response({"status":False})
@@ -86,10 +85,8 @@ class SavePlatform(APIView):
     def post(self, request):
         try:
             user = request.user
-            print("User ",user)
 
             data = request.data
-            print(data)
             name = data.get('Name')
             description = data.get('Description')
             startdate = data.get('StartDate')
@@ -175,7 +172,6 @@ class SaveMarineGrowth(APIView):
                     )
                     mg.save()
 
-                    print(data)
                     return Response({"status":True})
             return Response({"status":False})
         except:
@@ -387,9 +383,7 @@ class PlatformViewSet(
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
         instance: Platform = self.get_object()
-        # print("\n*********** ",request.data)
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        print(serializer)
         serializer.is_valid(raise_exception=True)
 
         # if not request.user.is_superuser:
@@ -398,13 +392,11 @@ class PlatformViewSet(
         #     )[0]
         #     if platform.access_type != "M":
         #         raise exceptions.PermissionDenied()
-        # print("user 1 ",request.user)
         if not request.user.is_superuser:
-            print('aman')
             platform = PlatformOwnership.objects.filter(pk=instance.id, user=request.user).first()
             if platform.modify_access != True:
                 raise exceptions.PermissionDenied()
-
+        
         self.perform_update(serializer)
 
         if getattr(instance, "_prefetched_objects_cache", None):

@@ -293,9 +293,9 @@ class PlatformSerializer(serializers.ModelSerializer):
 
     platform_legs_and_bracing_score = serializers.SerializerMethodField(read_only=True)
 
-    scope_of_survey = ScopeOfSurveySerializer(read_only=True)
+    scope_of_survey = ScopeOfSurveySerializer()
 
-    other_detail = OtherDetailSerializer(read_only=True)
+    other_detail = OtherDetailSerializer()
 
     leg_pile_grouting = LegPileGroutingSerializer()
 
@@ -695,9 +695,7 @@ class PlatformSerializer(serializers.ModelSerializer):
 
     @transaction.atomic()
     def update(self, instance: Platform, validated_data: Dict):
-        print("update ",validated_data)
-        # other_detail = validated_data.pop("other_detail")
-        # print(other_detail)
+        # print("update ",validated_data)
         shallow_gas = validated_data.pop("shallow_gas")
         ShallowGas.objects.filter(platform=instance).update(**shallow_gas)
 
@@ -728,7 +726,6 @@ class PlatformSerializer(serializers.ModelSerializer):
         DeckLoad.objects.filter(platform=instance).update(**deck_load)
 
         deck_elevation_wave_in_deck = validated_data.pop("deck_elevation_wave_in_deck")
-        print("deck_elevation_wave_in_deck ",deck_elevation_wave_in_deck)
         DeckElevationWaveInDeck.objects.filter(platform=instance).update(
             **deck_elevation_wave_in_deck
         )
@@ -756,6 +753,18 @@ class PlatformSerializer(serializers.ModelSerializer):
         economic_impact_consequence = validated_data.pop("economic_impact_consequence")
         EconomicImpactConsequence.objects.filter(platform=instance).update(
             **economic_impact_consequence
+        )
+
+        scope_of_survey = validated_data.pop("scope_of_survey")
+        print(scope_of_survey)
+        ScopeOfSurvey.objects.filter(platform=instance).update(
+            **scope_of_survey
+        )
+        print("aman")
+
+        other_detail = validated_data.pop("other_detail")
+        OtherDetail.objects.filter(platform=instance).update(
+            **other_detail
         )
 
         return super().update(instance, validated_data)

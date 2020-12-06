@@ -640,7 +640,7 @@ class ScopeOfSurvey(models.Model):
     visual_scope = models.CharField(max_length=100, null=True,blank=True)
 
     wallut_method = models.CharField(max_length=100, null=True,blank=True)
-    wallut_scope = models.CharField(max_length=100, null=True,blank=True)
+    # wallut_scope = models.CharField(max_length=100, null=True,blank=True)
 
     weld_method = models.CharField(max_length=100, null=True,blank=True)    
     weld_scope = models.CharField(max_length=100, null=True,blank=True)

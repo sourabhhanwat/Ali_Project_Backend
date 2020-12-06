@@ -389,6 +389,7 @@ class PlatformViewSet(
         instance: Platform = self.get_object()
         # print("\n*********** ",request.data)
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        print(serializer)
         serializer.is_valid(raise_exception=True)
 
         # if not request.user.is_superuser:

@@ -62,7 +62,9 @@ from .models import (
     EconomicImpactConsequence,
     ProjectOwnership,
     SiteOwnership,
-    PlatformOwnership
+    PlatformOwnership,
+    ScopeOfSurvey,
+    OtherDetail
 )
 
 logger = logging.getLogger("core.serializers")
@@ -264,6 +266,20 @@ class EconomicImpactConsequenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = EconomicImpactConsequence
         exclude = ("platform",)
+    
+class ScopeOfSurveySerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = ScopeOfSurvey
+        exclude=("platform",)
+
+class OtherDetailSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = OtherDetail
+        exclude=("platform",)
 
 class PlatformSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
@@ -276,6 +292,10 @@ class PlatformSerializer(serializers.ModelSerializer):
     modify_access = serializers.SerializerMethodField(read_only=True)
 
     platform_legs_and_bracing_score = serializers.SerializerMethodField(read_only=True)
+
+    scope_of_survey = ScopeOfSurveySerializer(read_only=True)
+
+    other_detail = OtherDetailSerializer(read_only=True)
 
     leg_pile_grouting = LegPileGroutingSerializer()
 
@@ -676,6 +696,8 @@ class PlatformSerializer(serializers.ModelSerializer):
     @transaction.atomic()
     def update(self, instance: Platform, validated_data: Dict):
         print("update ",validated_data)
+        # other_detail = validated_data.pop("other_detail")
+        # print(other_detail)
         shallow_gas = validated_data.pop("shallow_gas")
         ShallowGas.objects.filter(platform=instance).update(**shallow_gas)
 

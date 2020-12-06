@@ -561,6 +561,90 @@ class EconomicImpactConsequence(models.Model):
         related_name="economic_impact_consequence",
     )
 
+class OtherDetail(models.Model):
+    platform = models.OneToOneField(
+        "Platform",
+        on_delete=models.CASCADE,
+        related_name="other_detail",
+    )
+    corrosion_survey = models.BooleanField(null=True, blank=True)
+    debris_clearance = models.BooleanField(null=True, blank=True)
+    manode_confirmation = models.BooleanField(null=True, blank=True)
+    marine_growth_cleaning = models.BooleanField(null=True, blank=True)
+    other = models.BooleanField(null=True, blank=True)
+    scour_repair = models.BooleanField(null=True, blank=True)
+    weld_monitoring = models.BooleanField(null=True, blank=True)
+
+class ScopeOfSurvey(models.Model):
+    platform = models.OneToOneField(
+        "Platform",
+        on_delete=models.CASCADE,
+        related_name="scope_of_survey",
+    )
+
+    above_water_visual_method = models.CharField(max_length=100, null=True,blank=True)
+    above_water_visual_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    anodes_method = models.CharField(max_length=100, null=True,blank=True)
+    anodes_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    appurtenance_survey_method = models.CharField(max_length=100, null=True,blank=True)
+    appurtenance_survey_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    caissons_method = models.CharField(max_length=100, null=True,blank=True)
+    caissons_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    cathodic_method = models.CharField(max_length=100, null=True,blank=True)
+    cathodic_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    coating_method = models.CharField(max_length=100, null=True,blank=True)
+    coating_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    conductor_method = models.CharField(max_length=100, null=True,blank=True)
+    conductor_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    debris_method = models.CharField(max_length=100, null=True,blank=True)
+    debris_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    deck_elevation_method = models.CharField(max_length=100, null=True,blank=True)
+    deck_elevation_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    flooded_method = models.CharField(max_length=100, null=True,blank=True)
+    flooded_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    general_visual_method = models.CharField(max_length=100, null=True,blank=True)
+    general_visual_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    joint_ndt_method = models.CharField(max_length=100, null=True,blank=True)
+    joint_ndt_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    jtube_method = models.CharField(max_length=100, null=True,blank=True)
+    jtube_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    marine_growth_method = models.CharField(max_length=100, null=True,blank=True)
+    marine_growth_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    risers_method = models.CharField(max_length=100, null=True,blank=True)
+    risers_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    scour_depth_method = models.CharField(max_length=100, null=True,blank=True)
+    scour_depth_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    supplemental_method = models.CharField(max_length=100, null=True,blank=True)
+    supplemental_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    underwater_cp_method = models.CharField(max_length=100, null=True,blank=True)
+    underwater_cp_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    visual_method = models.CharField(max_length=100, null=True,blank=True)
+    visual_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    wallut_method = models.CharField(max_length=100, null=True,blank=True)
+    wallut_scope = models.CharField(max_length=100, null=True,blank=True)
+
+    weld_method = models.CharField(max_length=100, null=True,blank=True)    
+    weld_scope = models.CharField(max_length=100, null=True,blank=True)
+
 
 class PlatformQuerySet(models.QuerySet):
     # def with_access_type(self, user: settings.AUTH_USER_MODEL):
@@ -776,5 +860,7 @@ class Platform(models.Model):
             MechanicalDamage.objects.create(platform=self)
             FloodedMember.objects.create(platform=self)
             DeckElevationWaveInDeck.objects.create(platform=self)
+            ScopeOfSurvey.objects.create(platform=self)
+            OtherDetail.objects.create(platform=self)
 
         return result

@@ -106,7 +106,8 @@ class SavePlatform(APIView):
                     view_access=True,
                 )
                 platformowner.save()
-                return Response({"status":True})
+                return Response({"platform_id":platform.id,
+                                "status":True})
                             
             user_ownership = ProjectOwnership.objects.filter(user=user, project_id=project_id).first()
             if user_ownership:
@@ -124,7 +125,8 @@ class SavePlatform(APIView):
                         user_id = user_id,
                     )
                     platformowner.save()
-                    return Response({"status":True})
+                    return Response({"platform_id":platform.id,
+                                    "status":True})
             return Response({"status":False})
 
         except:

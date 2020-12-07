@@ -112,7 +112,7 @@ class Corrosion(models.Model):
 
     average_anode_depletion_from_survey = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         blank=True,
         null=True,
         verbose_name="[ILOF-25] average anode depletion from survey (%)",
@@ -120,7 +120,7 @@ class Corrosion(models.Model):
 
     average_anode_potential_from_survey = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         blank=True,
         null=True,
         verbose_name="[ILOF-27] average anode potential from survey (mV)",
@@ -159,19 +159,19 @@ class MarineGrowthQuerySet(models.QuerySet):
 
 class MarineGrowth(models.Model):
     marine_growth_depths_from_el = models.DecimalField(
-        max_digits=10, decimal_places=5, verbose_name="[ILOF-29] marine growth depths", null=True, blank=True
+        max_digits=10, decimal_places=3, verbose_name="[ILOF-29] marine growth depths", null=True, blank=True
     )
     marine_growth_depths_to_el = models.DecimalField(
-        max_digits=10, decimal_places=5, verbose_name="[ILOF-29] marine growth depths", null=True, blank=True
+        max_digits=10, decimal_places=3, verbose_name="[ILOF-29] marine growth depths", null=True, blank=True
     )
     marine_growth_inspected_thickness = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         verbose_name="[ILOF-30] marine growth inspected thickness",
     )
     marine_growth_design_thickness = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         verbose_name="[ILOF-31] marine growth design thickness",
     )
     platform = models.ForeignKey(
@@ -184,14 +184,14 @@ class MarineGrowth(models.Model):
 class Scour(models.Model):
     design_scour_depth = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-32] design scour depth (m)",
     )
 
     measured_scour_depth_during_inspection = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         blank=True,
         null=True,
         verbose_name="[ILOF-34] measured scoured depth during inspection (m)",
@@ -274,7 +274,7 @@ class DeckLoad(models.Model):
 
     increase_in_topsides_load = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         blank=True,
         null=True,
         verbose_name="[ILOF-46] increase in topsides load (%)",
@@ -290,7 +290,7 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-48] cellar deck height (m)",
     )
@@ -299,7 +299,7 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-49] maximum wave height (m) - 10 years",
     )
@@ -308,7 +308,7 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-50] storm surge (m) - 10 years",
     )
@@ -317,7 +317,7 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-49] maximum wave height (m) - 100 years",
     )
@@ -326,7 +326,7 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-50] storm surge (m) - 100 years",
     )
@@ -335,7 +335,7 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-49] maximum wave height (m) - 10,000 years",
     )
@@ -344,7 +344,7 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-50] storm surge (m) - 10,000 years",
     )
@@ -353,7 +353,7 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-51] highest astronomical height (m)",
     )
@@ -431,7 +431,7 @@ class AdditionalAppurtenance(models.Model):
 class FatigueLoad(models.Model):
     water_depth = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-59] water depth (m)",
     )
@@ -449,7 +449,7 @@ class FatigueLoad(models.Model):
 class ReserveStrengthRatioScore(models.Model):
     reserve_strength_ratio = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-61] reserve strength ratio (rsr)",
     )
@@ -468,7 +468,7 @@ class ReserveStrengthRatioScore(models.Model):
 class EnvironmentalConsequence(models.Model):
     platform_type = models.ForeignKey(
         PlatformType,
-        default = 2,
+        default = 11,
         on_delete=models.DO_NOTHING,
         verbose_name="[ILOF-64] platform type",null=True,blank=True,
     )
@@ -484,14 +484,14 @@ class EnvironmentalConsequence(models.Model):
         null=True,
         default=0,
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         verbose_name="[ILOF-66] estimated fraction of oil production loss due to leakage (%)",
     )
 
     fixed_cost_for_spill_cleanup = models.DecimalField(
         null=True,
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-67] fixed cost for spill clean-up ($)",
     )
@@ -499,7 +499,7 @@ class EnvironmentalConsequence(models.Model):
     variable_cost_for_spill_cleanup = models.DecimalField(
         null=True,
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-68] variable cost for spill clean-up ($/bbl)",
     )
@@ -507,7 +507,7 @@ class EnvironmentalConsequence(models.Model):
     oil_price = models.DecimalField(
         null=True,
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-69] oil price ($/bbl)",
     )
@@ -520,35 +520,35 @@ class EnvironmentalConsequence(models.Model):
 class EconomicImpactConsequence(models.Model):
     daily_gas_production = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-70] daily gas production (mscf)",
     )
 
     gas_price = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-71] gas price ($/mscf)",
     )
 
     discount_date_for_interrupted_production = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-72] discount rate for interrupted production (%)",
     )
 
     fraction_of_remaining_production_loss = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=100,
         verbose_name="[ILOF-73] fraction of remaining production loss (%)",
     )
 
     platform_replacement_cost = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="[ILOF-74] platform replacement cost (usd)",
     )
@@ -569,13 +569,13 @@ class OtherDetail(models.Model):
         on_delete=models.CASCADE,
         related_name="other_detail",
     )
-    corrosion_survey = models.BooleanField(null=True, blank=True)
-    debris_clearance = models.BooleanField(null=True, blank=True)
-    manode_confirmation = models.BooleanField(null=True, blank=True)
-    marine_growth_cleaning = models.BooleanField(null=True, blank=True)
-    other = models.BooleanField(null=True, blank=True)
-    scour_repair = models.BooleanField(null=True, blank=True)
-    weld_monitoring = models.BooleanField(null=True, blank=True)
+    corrosion_survey = models.BooleanField(default=False)
+    debris_clearance = models.BooleanField(default=False)
+    manode_confirmation = models.BooleanField(default=False)
+    marine_growth_cleaning = models.BooleanField(default=False)
+    other = models.BooleanField(default=False)
+    scour_repair = models.BooleanField(default=False)
+    weld_monitoring = models.BooleanField(default=False)
 
 class ScopeOfSurvey(models.Model):
     platform = models.OneToOneField(
@@ -697,14 +697,14 @@ class Platform(models.Model):
 
     distance_to_shore = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="distance to shore (Km)",
     )
 
     distance_to_shipping_lane = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="distance to shipping lane (Km)",
     )
@@ -726,12 +726,12 @@ class Platform(models.Model):
     number_of_decks = models.IntegerField(default=0, verbose_name="number of decks")
 
     deck_weight = models.DecimalField(
-        max_digits=10, decimal_places=5, default=0, verbose_name="deck weight (mt)",
+        max_digits=10, decimal_places=3, default=0, verbose_name="deck weight (mt)",
     )
 
     pile_penetration_depth = models.DecimalField(
         max_digits=10,
-        decimal_places=5,
+        decimal_places=3,
         default=0,
         verbose_name="pile penetration depth (m)",
     )
@@ -792,7 +792,7 @@ class Platform(models.Model):
 
     platform_manned_status = models.ForeignKey(
         PlatformMannedStatus,
-        default = 5,
+        default = 7,
         on_delete=models.DO_NOTHING,
         verbose_name="[ILOF-63] platform manned status",null=True,blank=True
     )

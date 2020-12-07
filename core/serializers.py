@@ -695,7 +695,7 @@ class PlatformSerializer(serializers.ModelSerializer):
 
     @transaction.atomic()
     def update(self, instance: Platform, validated_data: Dict):
-        # print("update ",validated_data)
+        print("update ",validated_data)
         shallow_gas = validated_data.pop("shallow_gas")
         ShallowGas.objects.filter(platform=instance).update(**shallow_gas)
 
@@ -756,11 +756,10 @@ class PlatformSerializer(serializers.ModelSerializer):
         )
 
         scope_of_survey = validated_data.pop("scope_of_survey")
-        print(scope_of_survey)
+        # print(scope_of_survey)
         ScopeOfSurvey.objects.filter(platform=instance).update(
             **scope_of_survey
         )
-        print("aman")
 
         other_detail = validated_data.pop("other_detail")
         OtherDetail.objects.filter(platform=instance).update(

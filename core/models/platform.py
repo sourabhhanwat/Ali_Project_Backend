@@ -206,6 +206,7 @@ class FloodedMember(models.Model):
     number_of_flooded_members_in_last_inspection = models.IntegerField(
         null=True,
         blank=True,
+        default=0,
         verbose_name="[ILOF-36] number of flooded members in last inspection",
     )
 
@@ -224,6 +225,7 @@ class FloodedMember(models.Model):
     number_of_previous_inspection_flooded_members = models.IntegerField(
         null=True,
         blank=True,
+        default=0,
         verbose_name="[ILOF-39] number of previous inspection flooded members",
     )
 
@@ -231,24 +233,24 @@ class FloodedMember(models.Model):
         "Platform", on_delete=models.CASCADE, related_name="flooded_member"
     )
 
-    class Meta:
-        constraints = (
-            CheckConstraint(
-                check=(
-                              Q(number_of_flooded_members_in_last_inspection__isnull=True)
-                              & Q(flooded_members_last_inspection_date__isnull=True)
-                              & Q(previous_flooded_members_inspection_date__isnull=True)
-                              & Q(number_of_previous_inspection_flooded_members__isnull=True)
-                      )
-                      | (
-                              Q(number_of_flooded_members_in_last_inspection__isnull=False)
-                              & Q(flooded_members_last_inspection_date__isnull=False)
-                              & Q(previous_flooded_members_inspection_date__isnull=False)
-                              & Q(number_of_previous_inspection_flooded_members__isnull=False)
-                      ),
-                name="flooded_member_check",
-            ),
-        )
+    # class Meta:
+    #     constraints = (
+    #         CheckConstraint(
+    #             check=(
+    #                           Q(number_of_flooded_members_in_last_inspection__isnull=True)
+    #                           & Q(flooded_members_last_inspection_date__isnull=True)
+    #                           & Q(previous_flooded_members_inspection_date__isnull=True)
+    #                           & Q(number_of_previous_inspection_flooded_members__isnull=True)
+    #                   )
+    #                   | (
+    #                           Q(number_of_flooded_members_in_last_inspection__isnull=False)
+    #                           & Q(flooded_members_last_inspection_date__isnull=False)
+    #                           & Q(previous_flooded_members_inspection_date__isnull=False)
+    #                           & Q(number_of_previous_inspection_flooded_members__isnull=False)
+    #                   ),
+    #             name="flooded_member_check",
+    #         ),
+    #     )
 
 
 class UnprotectedAppurtenances(models.Model):

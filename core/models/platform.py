@@ -56,8 +56,8 @@ class ShallowGas(models.Model):
 
 
 class LastInspection(models.Model):
-    last_underwater_inspection_date = models.DateField(
-        null=True, blank=True, verbose_name="[ILOF-11] last underwater inspection date"
+    last_underwater_inspection_date = models.DateTimeField(
+        null=True, blank=True, verbose_name="[ILOF-11] last underwater inspection date",
     )
 
     rbui_inspection_interval = models.IntegerField(

@@ -1050,8 +1050,10 @@ class EnvironmentalConsequenceCategoryCalculator:
         clof_92 = environmental_consequence.fixed_cost_for_spill_cleanup + (
                 environmental_consequence.variable_cost_for_spill_cleanup * clof_91
         )
-        print(clof_92)
-        return Decimal(clof_92) / environmental_consequence.oil_price
+        value = Decimal(clof_92) / environmental_consequence.oil_price
+        value =  round(value,3)      
+
+        return value
         # return Decimal(3)
 
 class CalculatedEconmicImpactConsequenceCalculator:

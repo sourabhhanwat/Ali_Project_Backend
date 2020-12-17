@@ -468,7 +468,7 @@ class ReserveStrengthRatioScore(models.Model):
 class EnvironmentalConsequence(models.Model):
     platform_type = models.ForeignKey(
         PlatformType,
-        default = 11,
+        default = 1,
         on_delete=models.DO_NOTHING,
         verbose_name="[ILOF-64] platform type",null=True,blank=True,
     )
@@ -792,7 +792,7 @@ class Platform(models.Model):
 
     platform_manned_status = models.ForeignKey(
         PlatformMannedStatus,
-        default = 7,
+        default = 1,
         on_delete=models.DO_NOTHING,
         verbose_name="[ILOF-63] platform manned status",null=True,blank=True
     )

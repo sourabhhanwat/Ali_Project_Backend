@@ -19,7 +19,8 @@ from .views import (
     DeleteProject,
     DeletePlatform,
     UpdatePlatform,
-    UpdateProject
+    UpdateProject,
+    DeleteMarineGrowth
 )
 
 router = DefaultRouter()
@@ -40,6 +41,7 @@ urlpatterns = [
     path("saveproject/", SaveProject.as_view(), name="project-list"),
     path("saveplatform/", SavePlatform.as_view(), name="platform-list"),
     path("savemarinegrowth/", SaveMarineGrowth.as_view(), name="marine-list"),
+    path("deletemarinegrowth/", DeleteMarineGrowth.as_view(), name="delete-marine-growth"),
     path("deleteproject/", DeleteProject.as_view(), name="project-delete"),
     path("deleteplatform/", DeletePlatform.as_view(), name="platform-delete"),
     path("updateproject/", UpdateProject.as_view(), name="project-update"),

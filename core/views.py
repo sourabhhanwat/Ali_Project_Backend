@@ -179,6 +179,11 @@ class SaveMarineGrowth(APIView):
         except:
             return Response({"status":False})
 
+class DeleteMarineGrowth(APIView):
+    def post(self, request):
+        print("aman")
+        return Response("aman")
+
 class DeletePlatform(APIView):
     def get(self,request):
         return Response("Delete platform")

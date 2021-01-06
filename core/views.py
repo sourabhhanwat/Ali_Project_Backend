@@ -181,8 +181,13 @@ class SaveMarineGrowth(APIView):
 
 class DeleteMarineGrowth(APIView):
     def post(self, request):
-        print("aman")
-        return Response("aman")
+        try:
+            data = request.data
+            marine_id = data.get('marineGrowthId')
+            marine = MarineGrowth.objects.get(id = marine_id).delete()
+            return Response({"status":True})
+        except:
+            return Response({"status":False})
 
 class DeletePlatform(APIView):
     def get(self,request):

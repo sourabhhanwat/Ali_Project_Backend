@@ -645,12 +645,10 @@ class ScourCalculator(BaseCalculator):
         if scour.measured_scour_depth_during_inspection:
             if scour.measured_scour_depth_during_inspection > scour.design_scour_depth:
                 if (
-                        scour.measured_scour_depth_during_inspection * 2
-                        > scour.design_scour_depth
+                        scour.measured_scour_depth_during_inspection > 2 * scour.design_scour_depth
                 ):
                     if (
-                            scour.measured_scour_depth_during_inspection * 3
-                            > scour.design_scour_depth
+                            scour.measured_scour_depth_during_inspection > 3 * scour.design_scour_depth
                     ):
                         clof_51 = self.sd_vh
                     else:

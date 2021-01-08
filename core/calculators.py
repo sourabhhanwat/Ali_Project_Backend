@@ -684,7 +684,7 @@ class FloodedMemberScoreCalculator(BaseCalculator):
     def _calculate(self):
         flooded_member = self.instance.flooded_member
 
-        if flooded_member.number_of_flooded_members_in_last_inspection is not None:
+        if flooded_member.number_of_flooded_members_in_last_inspection is not None and flooded_member.number_of_previous_inspection_flooded_members is not None:
             if flooded_member.number_of_flooded_members_in_last_inspection > 0 and flooded_member.number_of_previous_inspection_flooded_members > 0:
                 clof_54 = Decimal(
                     relativedelta(

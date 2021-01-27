@@ -825,7 +825,7 @@ class Platform(models.Model):
         elif 1 < value < 1.32:
             return 490
         elif 1.32 <= value < 1.5:
-            return 490
+            return 310
         elif 1.5 <= value < 1.9:
             return 120
         else:

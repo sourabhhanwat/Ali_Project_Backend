@@ -58,26 +58,26 @@ class ProjectOwnership(models.Model):
         ]
 
 
-class SiteOwnership(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    site = models.ForeignKey("Site", on_delete=models.CASCADE)
-    assign_time = models.DateTimeField(auto_now=True)
+# class SiteOwnership(models.Model):
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     site = models.ForeignKey("Site", on_delete=models.CASCADE)
+#     assign_time = models.DateTimeField(auto_now=True)
 
-    AccessType = [
-        ('V', 'View'),
-        ('M', 'Modify'),
-    ]
+#     AccessType = [
+#         ('V', 'View'),
+#         ('M', 'Modify'),
+#     ]
 
-    access_type = models.CharField(
-        max_length=1, choices=AccessType, default='V'
-    )
+#     access_type = models.CharField(
+#         max_length=1, choices=AccessType, default='V'
+#     )
 
-    def __str__(self):
-        return f"User {self.user.username} manage Site {self.site.name}"
+#     def __str__(self):
+#         return f"User {self.user.username} manage Site {self.site.name}"
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["user", "site"], name="unique_site_ownership"
-            )
-        ]
+#     class Meta:
+#         constraints = [
+#             models.UniqueConstraint(
+#                 fields=["user", "site"], name="unique_site_ownership"
+#             )
+#         ]

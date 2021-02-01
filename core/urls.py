@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     UserViewSet,
     ProjectViewSet,
-    SiteViewSet,
+    # SiteViewSet,
     PlatformViewSet,
     PlatformTypeViewSet,
     BracingTypeViewSet,
@@ -25,7 +25,7 @@ from .views import (
 
 router = DefaultRouter()
 router.register(r"projects", ProjectViewSet, basename="project")
-router.register(r"sites", SiteViewSet, basename="site")
+# router.register(r"sites", SiteViewSet, basename="site")
 router.register(r"platforms", PlatformViewSet, basename="platform")
 router.register(r"platform-types", PlatformTypeViewSet, basename="platform-type")
 router.register(r"bracing-types", BracingTypeViewSet, basename="bracing-type")

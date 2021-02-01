@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from .models import (
     User,
     Project,
-    Site,
+    # Site,
     Platform,
     PlatformType,
     BracingType,
@@ -23,7 +23,7 @@ from .models import (
 from .serializers import (
     UserSerializer,
     ProjectSerializer,
-    SiteSerializer,
+    # SiteSerializer,
     PlatformSerializer,
     PlatformTypeSerializer,
     BracingTypeSerializer,
@@ -369,11 +369,11 @@ class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [OwnedResourceFilter, DjangoFilterBackend]
 
 
-class SiteViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = SiteSerializer
-    queryset = Site.objects.all()
-    filter_backends = [OwnedResourceFilter, DjangoFilterBackend]
-    filterset_fields = ["project"]
+# class SiteViewSet(viewsets.ReadOnlyModelViewSet):
+#     serializer_class = SiteSerializer
+#     queryset = Site.objects.all()
+#     filter_backends = [OwnedResourceFilter, DjangoFilterBackend]
+#     filterset_fields = ["project"]
 
 
 class PlatformFilter(FilterSet):

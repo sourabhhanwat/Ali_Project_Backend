@@ -39,7 +39,7 @@ from .calculators import (
 from .models import (
     User,
     Project,
-    Site,
+    # Site,
     Platform,
     PlatformType,
     NumberOfLegsType,
@@ -91,12 +91,12 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = "__all__"
 
-class SiteSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField()
+# class SiteSerializer(serializers.ModelSerializer):
+#     id = serializers.ReadOnlyField()
 
-    class Meta:
-        model = Site
-        exclude = ("users",)
+#     class Meta:
+#         model = Site
+#         exclude = ("users",)
 
 # class SiteOwnershipSerializer(serializers.ModelSerializer):
 #     site = SiteSerializer()
@@ -363,7 +363,7 @@ class PlatformSerializer(serializers.ModelSerializer):
 
     economic_impact_consequence = EconomicImpactConsequenceSerializer()
 
-    site = SiteSerializer(read_only=True)
+    # site = SiteSerializer(read_only=True)
 
     bracing_type = BracingTypeSerializer(read_only=True)
 

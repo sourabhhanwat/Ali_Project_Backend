@@ -290,7 +290,7 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=3,
+        decimal_places=5,
         default=0,
         verbose_name="[ILOF-48] cellar deck height (m)",
     )
@@ -299,7 +299,7 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=3,
+        decimal_places=5,
         default=0,
         verbose_name="[ILOF-49] maximum wave height (m) - 10 years",
     )
@@ -308,7 +308,7 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=3,
+        decimal_places=5,
         default=0,
         verbose_name="[ILOF-50] storm surge (m) - 10 years",
     )
@@ -317,7 +317,7 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=3,
+        decimal_places=5,
         default=0,
         verbose_name="[ILOF-49] maximum wave height (m) - 100 years",
     )
@@ -326,7 +326,7 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=3,
+        decimal_places=5,
         default=0,
         verbose_name="[ILOF-50] storm surge (m) - 100 years",
     )
@@ -335,7 +335,7 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=3,
+        decimal_places=5,
         default=0,
         verbose_name="[ILOF-49] maximum wave height (m) - 10,000 years",
     )
@@ -344,7 +344,7 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=3,
+        decimal_places=5,
         default=0,
         verbose_name="[ILOF-50] storm surge (m) - 10,000 years",
     )
@@ -353,13 +353,13 @@ class DeckElevationWaveInDeck(models.Model):
         null=True,
         blank=True,
         max_digits=10,
-        decimal_places=3,
+        decimal_places=5,
         default=0,
         verbose_name="[ILOF-51] highest astronomical height (m)",
     )
 
-    crest_height_factor = models.IntegerField(
-        null=True, blank=True, default=0, verbose_name="[ILOF-52] crest height factor"
+    crest_height_factor = models.DecimalField(
+        null=True, blank=True, default=0, decimal_places=5,max_digits=10, verbose_name="[ILOF-52] crest height factor"
     )
 
     platform = models.OneToOneField(

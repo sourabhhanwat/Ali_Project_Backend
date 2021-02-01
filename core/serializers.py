@@ -61,7 +61,7 @@ from .models import (
     EnvironmentalConsequence,
     EconomicImpactConsequence,
     ProjectOwnership,
-    SiteOwnership,
+    # SiteOwnership,
     PlatformOwnership,
     ScopeOfSurvey,
     OtherDetail
@@ -98,11 +98,11 @@ class SiteSerializer(serializers.ModelSerializer):
         model = Site
         exclude = ("users",)
 
-class SiteOwnershipSerializer(serializers.ModelSerializer):
-    site = SiteSerializer()
-    class Meta:
-        model=SiteOwnership
-        fields=("access_type","site")
+# class SiteOwnershipSerializer(serializers.ModelSerializer):
+#     site = SiteSerializer()
+#     class Meta:
+#         model=SiteOwnership
+#         fields=("access_type","site")
 
 class PlatformTypeSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()

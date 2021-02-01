@@ -12,7 +12,7 @@ from django.utils import timezone
 from .project import Project
 
 from . import NumberOfLegsType, BracingType, PlatformMannedStatus, PlatformType
-from .ownership import PlatformOwnership, SiteOwnership, ProjectOwnership
+from .ownership import PlatformOwnership, ProjectOwnership
 
 DATE_1969 = datetime.datetime(year=1969, month=1, day=1, tzinfo=pytz.utc)
 

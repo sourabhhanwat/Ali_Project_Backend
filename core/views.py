@@ -17,7 +17,7 @@ from .models import (
     PlatformMannedStatus,
     MarineGrowth,
     ProjectOwnership,
-    SiteOwnership,
+    # SiteOwnership,
     PlatformOwnership
 )
 from .serializers import (
@@ -31,7 +31,7 @@ from .serializers import (
     PlatformMannedStatusSerializer,
     MarineGrowthSerializer,
     ProjectOwnershipSerializer,
-    SiteOwnershipSerializer,
+    # SiteOwnershipSerializer,
     PlatformOwnershipSerializer
 )
 

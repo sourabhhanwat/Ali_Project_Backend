@@ -11,7 +11,7 @@ from .models import (
     Site,
     ProjectOwnership,
     Platform,
-    SiteOwnership,
+    # SiteOwnership,
     PlatformOwnership,
     PlatformMannedStatus,
     EconomicImpactConsequence,
@@ -32,9 +32,9 @@ class ProjectOwnershipInline(admin.TabularInline):
 #     inlines = (ProjectOwnershipInline,)
 
 
-class SiteOwnershipInline(admin.TabularInline):
-    model = SiteOwnership
-    extra = 1
+# class SiteOwnershipInline(admin.TabularInline):
+#     model = SiteOwnership
+#     extra = 1
 
 
 # @admin.register(Site)

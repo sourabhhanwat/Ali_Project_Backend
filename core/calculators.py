@@ -453,11 +453,13 @@ class CorrosionScoreCalculator(BaseCalculator):
         print("clof 30 ",clof_30)
 
         if corrosion.anode_survey_inspection_date:
-            print(relativedelta(corrosion.anode_survey_inspection_date, clof_29).days)
-            clof_34 = (
-                    relativedelta(corrosion.anode_survey_inspection_date, clof_29).days
-                    / Decimal(365)
-            ).quantize(1, ROUND_HALF_UP)
+            print((corrosion.anode_survey_inspection_date - clof_29).days)
+            # clof_34 = (
+            #         relativedelta(corrosion.anode_survey_inspection_date, clof_29).days
+            #         / Decimal(365)
+            # ).quantize(1, ROUND_HALF_UP)
+            clof_34 = ((
+                    (corrosion.anode_survey_inspection_date - clof_29).days)/ Decimal(365)).quantize(1, ROUND_HALF_UP)
             print("clof 34 ",clof_34)
             if clof_34 == 0:
                 clof_34 = 1
@@ -473,9 +475,9 @@ class CorrosionScoreCalculator(BaseCalculator):
             print("clof 36 ",clof_36)
             clof_37 = corrosion.average_anode_depletion_from_survey + (
                     (
-                            relativedelta(
-                                self.instance.rbui_assessment_date,
-                                corrosion.anode_survey_inspection_date,
+                            (
+                                self.instance.rbui_assessment_date -
+                                corrosion.anode_survey_inspection_date
                             ).days
                             / Decimal(365)
                     ).quantize(1, ROUND_HALF_UP)
@@ -496,8 +498,12 @@ class CorrosionScoreCalculator(BaseCalculator):
             print("clof 38 ",clof_38)
 
         else:
+            # clof_31 = (
+            #         relativedelta(self.instance.rbui_assessment_date, clof_29).days
+            #         / Decimal(365)
+            # ).quantize(1, ROUND_HALF_UP)
             clof_31 = (
-                    relativedelta(self.instance.rbui_assessment_date, clof_29).days
+                    (self.instance.rbui_assessment_date - clof_29).days
                     / Decimal(365)
             ).quantize(1, ROUND_HALF_UP)
 
@@ -528,10 +534,16 @@ class CorrosionScoreCalculator(BaseCalculator):
             else:
                 clof_43 = clof_41 = self.pot_l
         else:
-            clof_39 = (
-                    relativedelta(
-                        self.instance.rbui_assessment_date,
-                        self.instance.platform_installation_date,
+            # clof_39 = (
+            #         relativedelta(
+            #             self.instance.rbui_assessment_date,
+            #             self.instance.platform_installation_date
+            #         ).days
+            #         / Decimal(365)
+            # ).quantize(1, ROUND_HALF_UP)
+            clof_39 = ((
+                        self.instance.rbui_assessment_date -
+                        self.instance.platform_installation_date
                     ).days
                     / Decimal(365)
             ).quantize(1, ROUND_HALF_UP)
@@ -693,7 +705,7 @@ class FloodedMemberScoreCalculator(BaseCalculator):
         flooded_member = self.instance.flooded_member
 
         if flooded_member.number_of_flooded_members_in_last_inspection is not None and flooded_member.number_of_previous_inspection_flooded_members is not None:
-            if flooded_member.number_of_flooded_members_in_last_inspection > 0 and flooded_member.number_of_previous_inspection_flooded_members > 0:
+            if flooded_member.number_of_flooded_members_in_last_inspection > 0 and flooded_member.number_of_previous_inspection_flooded_members >= 0:
                 clof_54 = Decimal(
                     relativedelta(
                         flooded_member.flooded_members_last_inspection_date,

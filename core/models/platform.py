@@ -547,7 +547,7 @@ class EconomicImpactConsequence(models.Model):
     )
 
     platform_replacement_cost = models.DecimalField(
-        max_digits=10,
+        max_digits=15,
         decimal_places=3,
         default=0,
         verbose_name="[ILOF-74] platform replacement cost (usd)",

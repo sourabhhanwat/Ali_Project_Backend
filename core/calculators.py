@@ -446,33 +446,33 @@ class CorrosionScoreCalculator(BaseCalculator):
         except (AttributeError, AssertionError):
             clof_29 = corrosion.original_anode_installation_date
 
-        print("ilof 24 ",corrosion.anode_survey_inspection_date)
-        print("clof 28 ",clof_28)
-        print("clof 29 ",clof_29)
+        # print("ilof 24 ",corrosion.anode_survey_inspection_date)
+        # print("clof 28 ",clof_28)
+        # print("clof 29 ",clof_29)
         clof_30 = (100 / Decimal(clof_28)).quantize(1, ROUND_HALF_UP)
-        print("clof 30 ",clof_30)
+        # print("clof 30 ",clof_30)
 
         if corrosion.anode_survey_inspection_date:
-            print((corrosion.anode_survey_inspection_date - clof_29).days)
+            # print((corrosion.anode_survey_inspection_date - clof_29).days)
             # clof_34 = (
             #         relativedelta(corrosion.anode_survey_inspection_date, clof_29).days
             #         / Decimal(365)
             # ).quantize(1, ROUND_HALF_UP)
             clof_34 = ((
                     (corrosion.anode_survey_inspection_date - clof_29).days)/ Decimal(365)).quantize(1, ROUND_HALF_UP)
-            print("clof 34 ",clof_34)
+            
             if clof_34 == 0:
                 clof_34 = 1
-            print("clof 34 ",clof_34)
+
             clof_35 = (
                     corrosion.average_anode_depletion_from_survey / clof_34
             ).quantize(1, ROUND_HALF_UP)
-            print("clof 35 ",clof_35)
+            
             if clof_35 > clof_30:
                 clof_36 = clof_35
             else:
                 clof_36 = clof_30
-            print("clof 36 ",clof_36)
+            
             clof_37 = corrosion.average_anode_depletion_from_survey + (
                     (
                             (
@@ -483,7 +483,7 @@ class CorrosionScoreCalculator(BaseCalculator):
                     ).quantize(1, ROUND_HALF_UP)
                     * clof_36
             )
-            print("clof 37 ",clof_37)
+            
             if clof_37 > 10:
                 if clof_37 > 50:
                     if clof_37 > 75:
@@ -494,8 +494,6 @@ class CorrosionScoreCalculator(BaseCalculator):
                     clof_42 = clof_38 = self.dep_m
             else:
                 clof_42 = clof_38 = self.dep_l
-
-            print("clof 38 ",clof_38)
 
         else:
             # clof_31 = (
@@ -706,11 +704,10 @@ class FloodedMemberScoreCalculator(BaseCalculator):
 
         if flooded_member.number_of_flooded_members_in_last_inspection is not None and flooded_member.number_of_previous_inspection_flooded_members is not None:
             if flooded_member.number_of_flooded_members_in_last_inspection > 0 and flooded_member.number_of_previous_inspection_flooded_members >= 0:
+
                 clof_54 = Decimal(
-                    relativedelta(
-                        flooded_member.flooded_members_last_inspection_date,
-                        flooded_member.previous_flooded_members_inspection_date,
-                    ).years
+                        flooded_member.flooded_members_last_inspection_date.year -
+                        flooded_member.previous_flooded_members_inspection_date.year
                 )
 
                 clof_55 = Decimal(
@@ -718,16 +715,13 @@ class FloodedMemberScoreCalculator(BaseCalculator):
                     - flooded_member.number_of_previous_inspection_flooded_members
                 )
 
-                clof_56 = (clof_55 / clof_54).quantize(1, ROUND_HALF_UP)
+                clof_56 = (clof_55 / clof_54)
 
-                clof_57 = relativedelta(
-                    self.instance.rbui_assessment_date,
-                    flooded_member.flooded_members_last_inspection_date,
-                ).years
+                clof_57 = self.instance.rbui_assessment_date.year - flooded_member.flooded_members_last_inspection_date.year
 
                 clof_58 = (
                         flooded_member.number_of_flooded_members_in_last_inspection
-                        + (clof_56 * clof_57 * Decimal("1.5"))
+                        + (clof_56 * clof_57 * Decimal(1.5))
                 )
 
                 if clof_58 > 3:
@@ -1061,7 +1055,7 @@ class EnvironmentalConsequenceCategoryCalculator:
             return
 
         clof_91 = (
-                environmental_consequence.estimated_fraction_of_oil_production_loss_due_to_leakage
+                (environmental_consequence.estimated_fraction_of_oil_production_loss_due_to_leakage/100)
                 * environmental_consequence.daily_oil_production
         )
 
@@ -1087,7 +1081,7 @@ class CalculatedEconmicImpactConsequenceCalculator:
         
         ilof_74 = economic_impact_consequence.platform_replacement_cost
         ilof_75 = economic_impact_consequence.platform_replacement_time
-        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss
+        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss/100
 
         ilof_65=0
         if environmental_consequence.daily_oil_production:
@@ -1120,14 +1114,18 @@ class CalculatedEconmicImpactConsequenceCalculator:
         ilof_17 = corrosion.platform_design_life
 
         clof_97 = int(ilof_17 - clof_96)
-        ilof_72 = economic_impact_consequence.discount_date_for_interrupted_production
-        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss
 
-        clof_98 = clof_95 * 365 * (1/(1+ilof_72))
+        ilof_72 = economic_impact_consequence.discount_date_for_interrupted_production/100
+        clof_98 = 0
+        for i in range(1, int(clof_97)+1):
+            discount_rate = 1/pow((1+ilof_72),i)
+            rpv = clof_95 * discount_rate * ilof_75
+            clof_98 = clof_98 + rpv
+
+        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss/100
 
         clof_99 = clof_98 * ilof_73
         clof_99 = round(clof_99,2)
-
 
         if clof_99 > clof_100:
             clof_101 = clof_100/1000000
@@ -1149,7 +1147,7 @@ class CalculateEconomicImpactRemainingLifeServicesCalculator:
         
         ilof_74 = economic_impact_consequence.platform_replacement_cost
         ilof_75 = economic_impact_consequence.platform_replacement_time
-        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss
+        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss/100
 
         ilof_65=0
         if environmental_consequence.daily_oil_production:
@@ -1182,19 +1180,28 @@ class CalculateEconomicImpactRemainingLifeServicesCalculator:
         ilof_17 = corrosion.platform_design_life
 
         clof_97 = int(ilof_17 - clof_96)
-        ilof_72 = economic_impact_consequence.discount_date_for_interrupted_production
-        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss
 
-        clof_98 = clof_95 * 365 * (clof_97 * (1/pow(1+ilof_72,clof_97)))
+        ilof_72 = economic_impact_consequence.discount_date_for_interrupted_production/100
+        clof_98 = 0
+        for i in range(1, int(clof_97)+1):
+            discount_rate = 1/pow((1+ilof_72),i)
+            rpv = clof_95 * discount_rate * ilof_75
+            clof_98 = clof_98 + rpv
+
+        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss/100
+        print("ilf 73 ",ilof_73)
 
         clof_99 = clof_98 * ilof_73
         clof_99 = round(clof_99,2)
 
+        print("clof 99 ",clof_99)
 
         if clof_99 > clof_100:
             clof_101 = clof_100/1000000
         else:
             clof_101 = clof_99/1000000
+
+        print("clof 101 ",clof_101)
 
         if clof_97 <= 0:
             clof_102 = 0
@@ -1216,7 +1223,7 @@ class StructureReplacementDecisionCalculator:
         
         ilof_74 = economic_impact_consequence.platform_replacement_cost
         ilof_75 = economic_impact_consequence.platform_replacement_time
-        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss
+        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss/100
 
         ilof_65=0
         if environmental_consequence.daily_oil_production:
@@ -1249,10 +1256,15 @@ class StructureReplacementDecisionCalculator:
         ilof_17 = corrosion.platform_design_life
 
         clof_97 = int(ilof_17 - clof_96)
-        ilof_72 = economic_impact_consequence.discount_date_for_interrupted_production
-        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss
 
-        clof_98 = clof_95 * 365 * (1/(1+ilof_72))
+        ilof_72 = economic_impact_consequence.discount_date_for_interrupted_production/100
+        clof_98 = 0
+        for i in range(1, int(clof_97)+1):
+            discount_rate = 1/pow((1+ilof_72),i)
+            rpv = clof_95 * discount_rate * ilof_75
+            clof_98 = clof_98 + rpv
+
+        ilof_73 = economic_impact_consequence.fraction_of_remaining_production_loss/100
 
         clof_99 = clof_98 * ilof_73
         clof_99 = round(clof_99,2)
@@ -1366,7 +1378,7 @@ class ExposureCategorySurveyLevel3Calculator:
         elif clof_108 == 'L-2':
             clof_109 = '11-15'
         elif clof_108 == 'L-3':
-            clof_109 = '11-15'
+            clof_109 = 'Detection of significant structural damage should form the basis for initiation of a Level III survey'
         return clof_109
 
 # class RiskRankingCalculator:
